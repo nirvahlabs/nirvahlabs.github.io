@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nirvahlabs.github.io/sitemap.xml
