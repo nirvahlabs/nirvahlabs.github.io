@@ -1401,7 +1401,9 @@ function about() {
 }
 
 // ---- start ----
-load().then(() => { document.body.classList.toggle('no-write', !DESC.length); if (!store.get('welcomed', false) && !location.hash) location.hash = 'welcome'; route(); }).catch(err => { V.innerHTML = `<div class="card"><b>Could not load the questions.</b><p class="src">${esc(err.message)}</p></div>`; });
+// wait for every script (study.js, series.js ...) before the first screen: content can load before they are parsed
+const domReady = new Promise(r => document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', r, { once: true }) : r());
+Promise.all([load(), domReady]).then(() => { document.body.classList.toggle('no-write', !DESC.length); if (!store.get('welcomed', false) && !location.hash) location.hash = 'welcome'; route(); }).catch(err => { V.innerHTML = `<div class="card"><b>Could not load the questions.</b><p class="src">${esc(err.message)}</p></div>`; });
 </script>
 <script>/* Features added in v0.10: theme switch, Hindi interface, progress charts, full exam (objective + descriptive).
    Loaded after app.js; uses its globals (store, V, $, esc, MCQ, DESC, ST, SEC, M, C, B, ROUTES, TITLES ...). */
