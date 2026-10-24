@@ -97,6 +97,8 @@ h2{margin:0 0 10px;font-size:clamp(24px,3.6vw,34px);line-height:1.2}
 @media (prefers-color-scheme:dark){.score{color:#a9a5ff}}
 .steps{counter-reset:s;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
 .step{counter-increment:s;position:relative;padding-top:52px}
+.ticks{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:10px 22px}.ticks li{position:relative;padding-left:28px;line-height:1.5}.ticks li::before{content:"✓";position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:var(--gold);color:#1d1b3a;font-weight:800;font-size:.8rem;display:grid;place-items:center}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}.how ul{margin:8px 0 0;padding-left:18px}.how li{margin:4px 0;line-height:1.45}
 .step::before{content:counter(s);position:absolute;top:18px;left:20px;width:30px;height:30px;border-radius:50%;background:var(--gold);color:#1d1b3a;font-weight:800;display:grid;place-items:center}
 .write{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media (max-width:760px){.write{grid-template-columns:1fr}}
@@ -120,7 +122,7 @@ footer a{color:inherit}
 <body>
 <nav><div class="wrap">
   <a class="brand" href="#top"><span class="mark"><svg width="18" height="18" viewBox="0 0 108 108" aria-hidden="true"><path fill="#fff" d="M26,78h16v-14h-16zM46,78h16v-26h-16zM66,78h16v-40h-16z"/><path fill="#F2A12B" d="M74,22l3.5,7.1 7.8,1.1 -5.6,5.5 1.3,7.8 -7,-3.7 -7,3.7 1.3,-7.8 -5.6,-5.5 7.8,-1.1z"/></svg></span>NIRVAH LABS</a>
-  <div class="links"><a href="syllabus.html">Syllabus</a><a href="#price">Price</a><a href="daily.html">Daily questions</a><a href="updates.html">Updates</a><a href="#faq">FAQ</a>
+  <div class="links"><a href="syllabus.html">Syllabus</a><a href="#benefits">Benefits</a><a href="#how">How to use</a><a href="#price">Price</a><a href="daily.html">Daily questions</a><a href="updates.html">Updates</a><a href="#faq">FAQ</a>
     <a class="btn sm play" href="#">Get the app</a></div>
 </div></nav>
 
@@ -177,6 +179,8 @@ footer a{color:inherit}
       <li>Study only on weekends, then forget</li></ul></div>
     <div class="card good"><h3>With Unnati</h3><ul>
       <li>Current content from public RBI directions, SBI pages and Acts, with a link to check the official source</li>
+      <li>Law Dictionary: which word is defined in which Act and section, with a ready line for your answer and a quiz</li>
+      <li>Fact Finder: a searchable master cheat sheet of every amount, deadline, tenure, age limit and percentage, each with its source date</li>
       <li>A "What changed" list of new rules and limits, before vs now, so you never learn an old figure</li>
       <li>Syllabus and weightage screen shows where the marks are</li>
       <li>A mock series on a real-exam screen: instructions, section tabs, mark for review and a submit summary</li>
@@ -231,6 +235,51 @@ footer a{color:inherit}
   </div>
 </section>
 
+<section id="benefits">
+  <p class="eyebrow">Why candidates choose Unnati</p>
+  <h2>Your benefits, point by point</h2>
+  <ul class="ticks">
+    <li><b>One app instead of a pile of booklets:</b> questions, mocks, descriptive answers, every figure and every legal word in one place.</li>
+    <li><b>Correct and current:</b> every answer is written from official RBI, SBI and India Code sources, with a link to check it and the month it is true as of.</li>
+    <li><b>Exam-real mocks:</b> your exam's exact section mix, marks and time, on a real exam screen with Mark for Review.</li>
+    <li><b>Remember more, forget less:</b> a one-line "Remember" rule after every answer, and your mistakes return until you get them right.</li>
+    <li><b>Fact Finder:</b> a searchable master cheat sheet of every ₹ limit, deadline, tenure, age and percentage.</li>
+    <li><b>Law Dictionary:</b> which word is defined in which Act and section, with a ready line to quote in your answer and interview.</li>
+    <li><b>Descriptive paper taught, not just shown:</b> Learn courses for letters, e-mails, rationale, for and against, situation, comprehension and essay, with crisp keyword answers for the 80-minute paper.</li>
+    <li><b>Hindi-medium friendly:</b> menus and writing help in Hindi; think in Hindi, write in exam English.</li>
+    <li><b>Never study an old figure:</b> the "What changed" list shows new rules and limits, before and now.</li>
+    <li><b>Fits a banker's day:</b> 10-20 minutes daily, works offline, no login, no ads, one payment for life.</li>
+  </ul>
+</section>
+
+<section id="how">
+  <p class="eyebrow">How to use Unnati</p>
+  <h2>A simple plan from day 1 to exam day</h2>
+  <div class="how">
+    <div class="card"><h3>Day 1 · 5 minutes</h3><ul>
+      <li>Install and choose your designation: clerk, Scale I or Scale II officer.</li>
+      <li>Set your exam date; the countdown and daily plan follow it.</li>
+      <li>Open Syllabus and see which sections carry the most marks.</li>
+      <li>Turn on the daily reminder and do your first 10 questions.</li></ul></div>
+    <div class="card"><h3>Every day · 20-40 minutes</h3><ul>
+      <li>Finish today's plan on Home to keep your streak.</li>
+      <li>Practise 10-20 new questions from one section; read the "Remember" line.</li>
+      <li>Clear yesterday's mistakes in Practice → Mistakes.</li>
+      <li>Write one descriptive answer and compare with the model.</li></ul></div>
+    <div class="card"><h3>Every week</h3><ul>
+      <li>One full mock in exam conditions.</li>
+      <li>Read the result: practise your two weakest sections next week.</li>
+      <li>One Learn lesson for the descriptive paper.</li>
+      <li>Check "What changed" for new rules and limits.</li></ul></div>
+    <div class="card"><h3>Last month</h3><ul>
+      <li>Two full mocks a week; revise mistakes and starred questions daily.</li>
+      <li>Every evening: one Fact Finder list (₹, days, %, age) and a Law Dictionary quiz.</li>
+      <li>Day before the exam: Fact Finder → "Last 24 hours".</li>
+      <li>Final week plan in the app for the exam-day checklist.</li></ul></div>
+  </div>
+  <p class="sub" style="margin-top:14px">The same guide is inside the app: More → How to use Unnati.</p>
+</section>
+
 <section id="features">
   <p class="eyebrow">What's inside</p>
   <h2>Everything you need, in one app</h2>
@@ -239,6 +288,8 @@ footer a{color:inherit}
     <div class="card"><div class="ic">⏱️</div><h3>Real exam screen</h3><p>Instructions first, then section tabs, Save &amp; Next, Mark for Review and Clear Response. Green, violet and grey palette, and a submit summary of answered, not answered and marked questions.</p></div>
     <div class="card"><div class="ic">🗂️</div><h3>Mock series + unlimited practice</h3><p>Up to 10 fixed papers per exam in the official section mix and difficulty mix (Simple, Moderate, Tough), on a real exam screen. Retake any paper and track your score paper by paper. Beyond the papers: tough mocks, and unlimited section-wise and mixed practice drawn from the full 2,400+ question bank.</p></div>
     <div class="card"><div class="ic">🧠</div><h3>Smart revision</h3><p>Your wrong answers and guesses, weakest section first, plus one-line notes made from your own mistakes and starred questions. Listen to them on the way to the office.</p></div>
+    <div class="card"><div class="ic">§</div><h3>Law Dictionary</h3><p>Guarantee, pledge, lien, mortgage, holder in due course, beneficial owner: every legal word with its Act, section and a one-line meaning, plus a line to quote in the descriptive paper. Search it, filter by Act, or take a quick quiz.</p></div>
+    <div class="card"><div class="ic">🔎</div><h3>Fact Finder</h3><p>One master cheat sheet for the last weeks: search any amount, deadline, tenure, age limit or percentage, filter by subject, then practise that fact in one tap. A "Last 24 hours" list holds the tough figures.</p></div>
     <div class="card"><div class="ic">🆕</div><h3>What changed</h3><p>New rules, limits and charges with what applied before and what applies now, and the questions on each change. Updated with every release.</p></div>
     <div class="card"><div class="ic">🔗</div><h3>Check the source</h3><p>Under each answer, a link to the official page: SBI, RBI, India Code, NABARD and more. Verify any answer yourself in one tap.</p></div>
     <div class="card"><div class="ic">📊</div><h3>Syllabus and weightage</h3><p>Every section with its questions, marks and share of the paper, sorted by importance, with a preparation tip for each.</p></div>
