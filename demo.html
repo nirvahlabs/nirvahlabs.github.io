@@ -778,7 +778,7 @@ function route() {
   const fn = ROUTES[r] || home;
   $('#title').textContent = TITLES[r] || C.appName;
   $('#topRight').textContent = ''; $('#topRight').className = '';
-  const tab = r === 'legal' && DESC.length ? 'write' : ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal'].includes(r) ? 'more' : 'home');
+  const tab = r === 'legal' && DESC.length ? 'write' : ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal', 'tools', 'blitz', 'planner', 'capsule'].includes(r) ? 'more' : 'home');
   document.querySelectorAll('.tabbar a').forEach(a => a.dataset.r === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   window.scrollTo(0, 0);
   fn();
@@ -2647,6 +2647,8 @@ function compareTable() {
     ['"What changed" rule updates', '✓', '✓'],
     ['Fact Finder (searchable cheat sheet of every figure)', 'On free questions', 'Every fact'],
     ['Law Dictionary: legal words with Act and section, quiz', 'Key words', 'All words'],
+    ['Learning tools: Daily Capsule, Figure Blitz', 'On free questions', 'On every question'],
+    ['Marks Planner: likely score and where to gain marks', '✓', '✓'],
     ['Future updates and new questions', 'Free set only', 'All, for life']
   ].filter(Boolean);
   return `<div class="card cmp"><table class="lt"><tr><th></th><th>Free</th><th>Full</th></tr>${rows.map(([k, f, p]) => `<tr><td>${esc(k)}</td><td>${esc(f)}</td><td><b>${esc(p)}</b></td></tr>`).join('')}</table>
@@ -2942,7 +2944,7 @@ function guide() {
 
   <h3>Every day (20-40 minutes)</h3>
   <div class="grid2">
-    <div class="card"><b>1 · Today's plan</b><p class="src">Home shows your target for the day. Finish it to keep your streak.</p></div>
+    <div class="card"><b>1 · Today's plan + Capsule</b><p class="src">Home shows your target for the day; start with the 5-minute Daily Capsule.</p></div>
     <div class="card"><b>2 · New questions</b><p class="src">10-20 questions from one section. Unseen ones come first.</p></div>
     <div class="card"><b>3 · Mistakes</b><p class="src">Practice → Mistakes. Clear yesterday's wrong answers.</p></div>
     <div class="card"><b>4 · ${hasDesc ? 'One answer' : 'Recall cards'}</b><p class="src">${hasDesc ? 'Write one descriptive answer or essay and compare with the model.' : 'Five minutes of quick recall cards on figures and limits.'}</p></div>
@@ -2950,6 +2952,7 @@ function guide() {
 
   <h3>Every week</h3>
   <div class="card"><ul class="gd-list">
+    <li><b>Open Marks Planner</b> and practise the top section it names. <a href="#planner">Open</a></li>
     <li><b>One full mock</b> in exam conditions: no breaks, phone on silent. <a href="#mock">Mock</a></li>
     <li><b>Read the result</b>: sections are shown weakest first. Practise the weakest two next week.</li>
     <li><b>Sectional tests</b> for a section you find slow; they run at exam pace.</li>
@@ -2964,6 +2967,7 @@ function guide() {
     ${hasDesc ? '<dt>✍️ Write</dt><dd>Descriptive questions or essays with frames, model answers, key-word chips, ready phrases and an answer checker. The Toolkit has phrases, key terms, Act sections and Hindi → English sentences.</dd>' : ''}
     <dt>🔎 Fact Finder</dt><dd>The master cheat sheet: search any amount, deadline, tenure, age limit or percentage; filter by subject; tap Practise to test yourself. "Last 24 hours" lists the tough figures. <a href="#facts">Open</a></dd>
     <dt>§ Law Dictionary</dt><dd>Which word is defined in which Act and section, with a ready line for your answer. Search, view A–Z or by Act, and "Quiz me". <a href="#legal">Open</a></dd>
+    <dt>🧰 Learning tools</dt><dd>Daily Capsule (10 questions a day by spaced repetition), Figure Blitz (60-second figure drill) and Marks Planner (your likely score and where the next hour earns most). <a href="#tools">Open</a></dd>
     <dt>🆕 What changed</dt><dd>New rules, limits and charges: what applied before and what applies now. <a href="#changes">Open</a></dd>
     <dt>••• More</dt><dd>About you, syllabus, progress, notes, your own questions, calculators, settings (theme, text size, Hindi menus, reminder, backup).</dd>
   </dl></div>
@@ -2984,6 +2988,7 @@ function guide() {
   <div class="card"><ul class="gd-list">
     <li>Two full mocks a week; revise mistakes and starred questions daily.</li>
     <li>Revise recent rule changes and figures; each question shows the month its facts are true as of.</li>
+    <li>Two rounds of <b>Figure Blitz</b> a day; read the missed facts.</li>
     <li>Every evening: one <b>Fact Finder</b> kind (₹, days, %, age) and one Law Dictionary <b>Quiz me</b>.</li>
     <li>Day before the exam: Fact Finder → <b>Last 24 hours</b>.</li>
     <li>Final week: More → Final week plan for an exam-day checklist and time plan.</li>
@@ -3477,9 +3482,9 @@ function factKind(q, k) {
 
 let factShown = 40;
 function facts() {
-  const all = MCQ.filter(q => q.tk && /^S\d+$/.test(q.sec));
+  const all = MCQ.filter(q => q.tk);
   let kind = store.get('factK', 'all'); if (!FK.some(k => k[0] === kind)) kind = 'all';
-  let sec = store.get('factS', ''); const secs = [...new Set(all.map(q => q.sec))].sort((a, b) => a.slice(1) - b.slice(1));
+  let sec = store.get('factS', ''); const secs = [...new Set(all.map(q => q.sec))].sort((a, b) => a.localeCompare(b, 'en', { numeric: true }));
   if (sec && !secs.includes(sec)) sec = '';
   const term = (store.get('factQ', '') || '').trim().toLowerCase();
   const match = all.filter(q => factKind(q, kind) && (!sec || q.sec === sec) &&
@@ -4519,6 +4524,181 @@ ROUTES.more = function () {
 Object.assign(ROUTES, { legal });
 Object.assign(TITLES, { legal: 'Law Dictionary' });
 Object.assign(HI, { 'Law Dictionary': 'कानूनी शब्दकोश', 'Quiz me': 'क्विज़', 'All Acts': 'सभी अधिनियम', 'In your answer:': 'उत्तर में:' });
+</script>
+<script>/* v0.43 Learning tools, all built from the app's own reviewed questions (no new facts):
+   #tools    hub that lists every tool
+   #blitz    Figure Blitz: 60 seconds, the number in a "Remember" line is blanked, pick it from four
+   #planner  Marks Planner: expected marks per section from your own accuracy, and where the next hour earns most
+   #capsule  Daily Capsule: 10 questions by spaced repetition (old mistakes, a week-old memory check, new facts)
+   Free users use them on free questions; Marks Planner works for everyone. */
+'use strict';
+
+const TOOL_LIST = () => [
+  ['capsule', '💊', 'Daily Capsule', '10 questions picked for today: old mistakes, a memory check, new facts', capsuleDone() ? 'Done today ✓' : 'About 5 minutes'],
+  ['blitz', '⚡', 'Figure Blitz', '60-second rapid fire on amounts, days, ages and %', store.get('blitzBest', 0) ? 'Best ' + store.get('blitzBest', 0) : 'Beat your best'],
+  ['planner', '🎯', 'Marks Planner', 'Your likely score by section, and where the next hour earns most marks', ''],
+  ['facts', '🔎', 'Fact Finder', 'Search every amount, deadline, tenure, age limit and %', ''],
+  ['legal', '§', 'Law Dictionary', 'Which word is defined in which Act and section · quiz', ''],
+  ['changes', '🆕', 'What changed', 'New rules and limits, before and now', ''],
+  ['calc', '🧮', 'Calculators', 'EMI, drawing power, MPBF, DSCR, NPA provision', '']
+].filter(t => ROUTES[t[0]]);
+
+function tools() {
+  V.innerHTML = `<h2>Learning tools</h2>
+    <p class="lede">Small tools that make you remember more and waste less time. Use one or two every day.</p>
+    <div class="stack">${TOOL_LIST().map(([r, ic, n, d, tag]) => `<a class="card chg-home" href="#${r}"><span class="chg-n">${ic}</span><span><b>${esc(n)}</b><small>${esc(d)}</small></span>${tag ? `<span class="tag">${esc(tag)}</span>` : '<span aria-hidden="true">›</span>'}</a>`).join('')}</div>`;
+  if (typeof translateTree === 'function') translateTree(V);
+}
+
+// ---------------------------------------------------------------- Figure Blitz
+const BLITZ_RE = /₹\s?[\d,.]+(\s?(lakh|crore))?|\$\s?[\d,.]+(\s?(million|billion))?|\b\d[\d,.]*\s?(%|bps|lakh|crore|working days|days|hours|months|years|weeks)?(?![\w\d])/gi;
+const blitzUnit = t => (t.match(/₹|\$|%|bps|lakh|crore|day|hour|month|year|week/i) || ['n'])[0].toLowerCase().replace(/s$/, '');
+function blitzItems() {
+  const facts = MCQ.filter(q => q.tk && unlocked(q));
+  const all = [];
+  facts.forEach(q => { const m = [...q.tk.matchAll(BLITZ_RE)].map(x => x[0].trim()).filter(t => /\d/.test(t) && !/^\d{4}$/.test(t)); if (m.length) all.push({ q, toks: m }); });
+  const byUnit = {};
+  all.forEach(f => f.toks.forEach(t => { const u = blitzUnit(t); (byUnit[u] = byUnit[u] || new Set()).add(t); }));
+  return all.map(f => {
+    const ans = f.toks[Math.floor(Math.random() * f.toks.length)], pool = [...(byUnit[blitzUnit(ans)] || [])].filter(t => t !== ans && !f.toks.includes(t));
+    if (pool.length < 3) return null;
+    const wrong = pool.sort(() => Math.random() - .5).slice(0, 3);
+    return { q: f.q, ans, text: f.q.tk.replace(ans, '_____'), opts: [ans, ...wrong].sort(() => Math.random() - .5) };
+  }).filter(Boolean).sort(() => Math.random() - .5);
+}
+function blitz() {
+  const items = blitzItems();
+  if (items.length < 5) { V.innerHTML = '<h2>Figure Blitz</h2><p class="lede">Not enough facts yet. Unlock Full access for every fact.</p>'; return; }
+  const best = store.get('blitzBest', 0);
+  V.innerHTML = `<h2>Figure Blitz</h2>
+    <p class="lede">60 seconds. A fact appears with its number missing; tap the right one. A wrong tap costs 3 seconds. Figures are where most marks slip.</p>
+    <div class="card" style="text-align:center"><div class="big">${best}<small>YOUR BEST</small></div>
+    <button class="btn block" id="bgo" style="margin-top:10px">Start</button></div>
+    <p class="src" style="margin-top:10px">${items.length.toLocaleString('en-IN')} facts in the pool${full() ? '' : ' · Full access opens every fact'}.</p>`;
+  $('#bgo').onclick = () => blitzRun(items);
+}
+function blitzRun(items) {
+  let i = 0, score = 0, left = 60, missed = [];
+  const tick = setInterval(() => { left--; const t = $('#bt'); if (t) t.textContent = Math.max(0, left) + 's'; if (left <= 0) end(); }, 1000);
+  stopTimer = () => clearInterval(tick);
+  function end() {
+    clearInterval(tick); stopTimer = () => { };
+    const best = store.get('blitzBest', 0), nb = score > best; if (nb) store.set('blitzBest', score);
+    V.innerHTML = `<h2>Figure Blitz</h2><div class="card" style="text-align:center"><div class="big">${score}<small>${nb ? 'NEW BEST!' : 'CORRECT · BEST ' + best}</small></div></div>
+      ${missed.length ? `<h3>Read these once more</h3><div class="stack">${missed.map(m => `<div class="card fact"><b class="fact-t">${esc(m.q.tk)}</b></div>`).join('')}</div>
+      <button class="btn ghost block" id="bpr" style="margin-top:10px">Practise these ${missed.length} questions</button>` : ''}
+      <button class="btn block" id="bag" style="margin-top:10px">Play again</button>`;
+    $('#bag').onclick = () => blitzRun(blitzItems());
+    const pr = $('#bpr'); if (pr) pr.onclick = () => runPractice(missed.map(m => m.q));
+  }
+  function show() {
+    if (left <= 0) return;
+    if (i >= items.length) { i = 0; items = blitzItems(); }
+    const it = items[i];
+    V.innerHTML = `<div class="row end"><h2 style="margin:0">Figure Blitz</h2><span class="tag" id="bt">${left}s</span></div>
+      <p class="progress">Score ${score} · ${esc(it.q.sec)}</p>
+      <div class="card"><p class="q" style="font-size:1.1rem">${esc(it.text)}</p>
+      <div class="opts" id="bo">${it.opts.map((o, k) => `<button class="opt" data-k="${k}"><span class="k">${LETTERS[k]}</span><span>${esc(o)}</span></button>`).join('')}</div></div>`;
+    $('#bo').onclick = e => {
+      const b = e.target.closest('[data-k]'); if (!b || $('#bo').dataset.done) return; $('#bo').dataset.done = 1;
+      const ok = it.opts[+b.dataset.k] === it.ans;
+      if (ok) score++; else { left -= 3; missed.push(it); }
+      b.classList.add(ok ? 'right' : 'wrong');
+      if (!ok) V.querySelectorAll('#bo .opt').forEach((el, k) => { if (it.opts[k] === it.ans) el.classList.add('right'); });
+      setTimeout(() => { i++; show(); }, ok ? 350 : 1100);
+    };
+  }
+  show();
+}
+
+// ---------------------------------------------------------------- Marks Planner
+function planner() {
+  const P = C.examPattern, me = P.marksEach || 1;
+  const maxObj = (TR.sections || M.sections || []).reduce((t, s) => t + s.examQs * (s.mk || me), 0) || P.questions * me;
+  const rows = (TR.sections || M.sections || []).map(s => {
+    const qs = MCQ.filter(q => q.sec === s.code), seen = qs.filter(q => ST[q.id]);
+    let a = 0, o = 0; seen.forEach(q => { const f = firstOk(ST[q.id]); if (f !== null) { a++; o += f; } });
+    const acc = a >= 10 ? o / a : null, marks = s.examQs * (s.mk || me);
+    return { s, total: qs.length, seen: seen.length, acc, marks, exp: acc === null ? null : marks * acc, gain: acc === null ? marks * 0.5 : marks * (1 - acc) };
+  }).filter(r => r.s.examQs);
+  const known = rows.filter(r => r.exp !== null), expObj = known.reduce((t, r) => t + r.exp, 0), knownMax = known.reduce((t, r) => t + r.marks, 0);
+  const proj = known.length ? expObj / knownMax * maxObj : null;
+  const target = store.get('planTarget', Math.round(maxObj * 0.6));
+  const order = [...rows].sort((x, y) => y.gain - x.gain);
+  const pct = v => Math.round(v * 100) + '%', f1 = v => (Math.round(v * 10) / 10).toLocaleString('en-IN');
+  V.innerHTML = `<h2>Marks Planner</h2>
+    <p class="lede">An estimate of your objective score from your own first-attempt accuracy, section by section, weighted by how many questions each section carries in ${esc(TR.full)}.</p>
+    <div class="grid2">
+      <div class="card stat"><div class="v">${proj === null ? '–' : f1(proj)} <small>/ ${f1(maxObj)}</small></div><div class="k">Likely objective marks${known.length < rows.length && known.length ? ` (from ${known.length} of ${rows.length} sections)` : ''}</div></div>
+      <div class="card stat"><div class="v"><input id="ptg" type="number" min="1" max="${maxObj}" step="${me}" value="${target}" style="width:5.5em;font:inherit"></div><div class="k">Your target marks${proj !== null ? ` · ${proj >= target ? 'on track ✓' : 'gap ' + f1(target - proj)}` : ''}</div></div>
+    </div>
+    <h3>Where the next hour earns most</h3>
+    <div class="stack">${order.slice(0, 3).map((r, k) => `<div class="card"><div class="row end"><b>${k + 1}. ${esc(r.s.name)}</b><span class="tag">up to +${f1(r.gain)} marks</span></div>
+      <p class="src" style="margin:6px 0">${r.acc === null ? `Not enough practice yet (${r.seen} seen). ${r.s.examQs} questions in the exam.` : `Accuracy ${pct(r.acc)} · ${r.s.examQs} questions in the exam · ${r.seen} of ${r.total} practised.`}</p>
+      <button class="btn small" data-ps="${r.s.code}">Practise 20 now</button></div>`).join('')}</div>
+    <h3>All sections</h3>
+    <div class="card tw"><table class="gd-tab"><thead><tr><th>Section</th><th>Exam Qs</th><th>Accuracy</th><th>Likely marks</th></tr></thead><tbody>
+      ${rows.map(r => `<tr><td>${esc(r.s.code)} · ${esc(r.s.name)}</td><td>${r.s.examQs}</td><td>${r.acc === null ? '–' : pct(r.acc)}</td><td>${r.exp === null ? '–' : f1(r.exp) + ' / ' + f1(r.marks)}</td></tr>`).join('')}</tbody></table></div>
+    <p class="src" style="margin-top:10px">A section needs at least 10 first attempts before it is counted. This is a guide from your practice, not an official cut-off or a promise of marks.${P.descMarks ? ' The descriptive paper is not included.' : ''}</p>`;
+  $('#ptg').onchange = e => { const v = +e.target.value; if (v > 0) { store.set('planTarget', v); planner(); } };
+  V.querySelectorAll('[data-ps]').forEach(b => b.onclick = () => {
+    const s = rows.find(r => r.s.code === b.dataset.ps).s, qs = MCQ.filter(q => q.sec === s.code && unlocked(q));
+    const pick = [...qs.filter(q => !ST[q.id]), ...qs.filter(q => ST[q.id] && ST[q.id][2])].slice(0, 20);
+    if (pick.length) runPractice(pick.length >= 5 ? pick : qs.slice(0, 20)); else location.hash = 'unlock';
+  });
+  if (typeof translateTree === 'function') translateTree(V);
+}
+
+// ---------------------------------------------------------------- Daily Capsule
+const capsuleDone = () => store.get('capsuleDay', '') === todayIST();
+function capsulePick() {
+  const pool = MCQ.filter(unlocked), now = Date.now(), day = 864e5;
+  const miss = pool.filter(q => ST[q.id] && ST[q.id][2] && now - (ST[q.id][4] || 0) >= day).sort((a, b) => (ST[a.id][4] || 0) - (ST[b.id][4] || 0)).slice(0, 4);
+  const old = pool.filter(q => ST[q.id] && !ST[q.id][2] && now - (ST[q.id][4] || 0) >= 7 * day).sort((a, b) => (ST[a.id][4] || 0) - (ST[b.id][4] || 0)).slice(0, 3);
+  const acc = {}; pool.forEach(q => { const s = ST[q.id]; if (s) { const a = acc[q.sec] = acc[q.sec] || [0, 0]; a[0] += s[0]; a[1] += s[1]; } });
+  const weak = Object.keys(acc).sort((x, y) => acc[x][1] / acc[x][0] - acc[y][1] / acc[y][0])[0];
+  const fresh = pool.filter(q => !ST[q.id] && q.tk && (!weak || q.sec === weak));
+  const fill = pool.filter(q => !ST[q.id] && q.tk);
+  const out = [...miss, ...old];
+  for (const q of [...fresh.sort(() => Math.random() - .5), ...fill.sort(() => Math.random() - .5)]) { if (out.length >= 10) break; if (!out.includes(q)) out.push(q); }
+  return { qs: out, miss: miss.length, old: old.length, weak };
+}
+function capsule() {
+  const c = capsulePick(), streak = store.get('capsuleStreak', 0);
+  V.innerHTML = `<h2>Daily Capsule</h2>
+    <p class="lede">Ten questions chosen for today by spaced repetition, the way memory actually works: see a fact again just before you would forget it.</p>
+    <div class="card"><ul class="gd-list">
+      <li><b>${c.miss}</b> old mistake${c.miss === 1 ? '' : 's'} to fix</li>
+      <li><b>${c.old}</b> memory check${c.old === 1 ? '' : 's'}: right a week or more ago, still right?</li>
+      <li><b>${c.qs.length - c.miss - c.old}</b> new fact${c.qs.length - c.miss - c.old === 1 ? '' : 's'}${c.weak ? ` from your weakest section (${esc(c.weak)})` : ''}</li></ul>
+    <button class="btn block" id="cgo" style="margin-top:10px"${c.qs.length ? '' : ' disabled'}>${capsuleDone() ? 'Take another capsule' : 'Start today\'s capsule'}</button></div>
+    <p class="src" style="margin-top:10px">${capsuleDone() ? 'Today\'s capsule is done ✓ · ' : ''}Capsule streak: ${streak} day${streak === 1 ? '' : 's'}.</p>`;
+  $('#cgo').onclick = () => {
+    if (!capsuleDone()) {
+      const y = new Date(Date.now() + 5.5 * 3600e3 - 864e5).toISOString().slice(0, 10);
+      store.set('capsuleStreak', store.get('capsuleDay', '') === y ? streak + 1 : 1); store.set('capsuleDay', todayIST());
+    }
+    runPractice(c.qs);
+  };
+  if (typeof translateTree === 'function') translateTree(V);
+}
+
+// ---------------------------------------------------------------- entry points
+const _homeTools = ROUTES.home;
+ROUTES.home = function () {
+  _homeTools();
+  const anchor = V.querySelector('a[href="#facts"]') || V.querySelector('.grid2'); if (!anchor) return;
+  anchor.insertAdjacentHTML('beforebegin', `<a class="card chg-home tools-home" href="#tools"><span class="chg-n">🧰</span><span><b>Learning tools</b><small>${capsuleDone() ? 'Capsule done today ✓ · ' : 'Daily Capsule · '}Figure Blitz · Marks Planner · Fact Finder · Law Dictionary</small></span><span aria-hidden="true">›</span></a>`);
+};
+const _moreTools = ROUTES.more;
+ROUTES.more = function () {
+  _moreTools();
+  const list = V.querySelector('.card.list');
+  if (list) list.insertAdjacentHTML('afterbegin', `<a class="item" href="#tools"><span>Learning tools<small>Daily Capsule, Figure Blitz, Marks Planner and more</small></span></a>`);
+};
+Object.assign(ROUTES, { tools, blitz, planner, capsule });
+Object.assign(TITLES, { tools: 'Learning tools', blitz: 'Figure Blitz', planner: 'Marks Planner', capsule: 'Daily Capsule' });
+Object.assign(HI, { 'Learning tools': 'सीखने के टूल', 'Figure Blitz': 'आंकड़ा ब्लिट्ज़', 'Marks Planner': 'अंक योजना', 'Daily Capsule': 'दैनिक कैप्सूल', 'Start': 'शुरू करें', 'Play again': 'फिर खेलें' });
 </script>
 </body>
 </html>
