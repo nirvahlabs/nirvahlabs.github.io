@@ -778,7 +778,7 @@ function route() {
   const fn = ROUTES[r] || home;
   $('#title').textContent = TITLES[r] || C.appName;
   $('#topRight').textContent = ''; $('#topRight').className = '';
-  const tab = ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal'].includes(r) ? 'more' : 'home');
+  const tab = r === 'legal' && DESC.length ? 'write' : ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal'].includes(r) ? 'more' : 'home');
   document.querySelectorAll('.tabbar a').forEach(a => a.dataset.r === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   window.scrollTo(0, 0);
   fn();
@@ -3561,11 +3561,12 @@ async function toolkit() {
   V.innerHTML = modeBar('toolkit', WRITE_MODES) + `<h2>Writing toolkit</h2>
     <div class="tk-tabs" role="tablist">${TK_TABS.map(([k, n]) => `<button role="tab" data-t="${k}" aria-selected="${k === tkTab}">${n}</button>`).join('')}</div>
     <p class="lede">${TK_HELP[tkTab]}</p>
+    ${tkTab === 'acts' ? `<a class="card chg-home" href="#legal" style="margin-bottom:12px"><span class="chg-n">§</span><span><b>Open the full Law Dictionary</b><small>162 legal words: Act, section, meaning and a ready line, with search and quiz</small></span><span aria-hidden="true">›</span></a>` : ''}
     <input type="text" id="tkq" placeholder="Search" value="${esc(tkQ)}" autocomplete="off">
     ${groups.length ? `<div class="chips" id="tkg" style="margin-top:10px">${groups.map(g => `<button class="chip" data-g="${esc(g)}" aria-pressed="${g === tkGroup}">${esc(g)}</button>`).join('')}</div>` : ''}
     <div class="card tk-list">${open.length ? open.map(row).join('') : '<p class="src">Nothing matches your search.</p>'}</div>
     ${locked ? `<div style="margin-top:12px">${lockCard(locked)}</div>` : ''}
-    ${typeof legal === 'function' ? `<a class="card chg-home" href="#legal" style="margin-top:12px"><span class="chg-n">§</span><span><b>Law Dictionary</b><small>Every legal word with its Act and section, plus a ready line for your answer</small></span><span aria-hidden="true">›</span></a>` : ''}`;
+`;
 
   V.querySelector('.tk-tabs').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; tkTab = b.dataset.t; tkGroup = 'All'; store.set('tkTab', tkTab); toolkit(); };
   const g = $('#tkg'); if (g) g.onclick = e => { const b = e.target.closest('[data-g]'); if (!b) return; tkGroup = b.dataset.g; toolkit(); };
@@ -3573,7 +3574,7 @@ async function toolkit() {
   q.oninput = () => { tkQ = q.value; clearTimeout(q.t); q.t = setTimeout(() => { const pos = q.selectionStart; toolkit().then(() => { const n = $('#tkq'); n.focus(); n.setSelectionRange(pos, pos); }); }, 250); };
 }
 
-WRITE_MODES.splice(1, 0, ['toolkit', 'Toolkit']);
+WRITE_MODES.splice(1, 0, ['toolkit', 'Toolkit'], ['legal', 'Law']);
 Object.assign(ROUTES, { toolkit });
 Object.assign(TITLES, { toolkit: 'Writing toolkit' });
 Object.assign(HI, {
@@ -4447,7 +4448,7 @@ async function legal() {
     if (view === 'act' && x.a !== last) { body += `<h3 class="leg-h">${esc(x.a)}</h3>`; last = x.a; }
     body += card(x);
   }
-  V.innerHTML = `<h2>Law Dictionary</h2>
+  V.innerHTML = (DESC.length ? modeBar('legal', WRITE_MODES) : '') + `<h2>Law Dictionary</h2>
     <p class="lede">Which word is defined in which Act and section, in one line. Good for objective questions, for quoting a section in the descriptive paper, and for interviews.</p>
     <div class="row" style="gap:8px"><input id="lq" type="search" placeholder="Search: pledge, Sec 126, guarantee, NI Act…" value="${esc(store.get('legQ', ''))}" style="flex:1">
       <button class="btn small" id="lquiz">Quiz me</button></div>
@@ -4501,7 +4502,14 @@ function legalQuiz(all) {
   show();
 }
 
-// More menu (the writing toolkit links here too)
+// Home card, so every user finds it (also for tracks without the Write tab)
+const _homeLeg = ROUTES.home;
+ROUTES.home = function () {
+  _homeLeg();
+  const ff = V.querySelector('a[href="#facts"]'), anchor = ff || V.querySelector('.grid2'); if (!anchor) return;
+  anchor.insertAdjacentHTML(ff ? 'afterend' : 'beforebegin', `<a class="card chg-home" href="#legal"><span class="chg-n">§</span><span><b>Law Dictionary</b><small>Which word is defined in which Act and section · quiz</small></span><span aria-hidden="true">›</span></a>`);
+};
+// More menu (Write → Law, and Toolkit → Acts link here too)
 const _moreLeg = ROUTES.more;
 ROUTES.more = function () {
   _moreLeg();
