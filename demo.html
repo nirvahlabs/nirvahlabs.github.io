@@ -160,7 +160,7 @@ button.card.list-like:disabled{opacity:.5;cursor:default}
 
 /* ---- v0.10: progress charts, full exam ---- */
 .bars{display:flex;flex-direction:column;gap:12px}
-.barrow{display:grid;grid-template-columns:1fr auto;gap:4px 10px;align-items:center}
+.barrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;align-items:center}
 .barrow .bl{grid-column:1/-1;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .barrow .bn{color:var(--muted)}
 .barrow .track{height:8px;border-radius:4px;background:var(--sunk);overflow:hidden}
@@ -307,7 +307,7 @@ body.no-tabs{padding-bottom:16px}
 
 /* motion: screen fade, answer feedback */
 @media (prefers-reduced-motion:no-preference){
-  main>*{animation:ppIn .22s ease-out}
+  main>*{animation:ppIn .12s ease-out}
   .opt.right{animation:ppPop .35s ease-out}
   .opt.wrong{animation:ppShake .35s ease-out}
 }
@@ -546,6 +546,86 @@ a.chg-home>span:nth-child(2){flex:1}
 .cb-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start;margin:6px 0}.cb-vs p{margin:4px 0 0;font-size:.88rem;color:var(--muted)}.cb-x{font-weight:800;color:var(--accent);padding-top:2px}.cb-opt{grid-template-columns:1fr;text-align:center;justify-items:center;font-weight:700}
 details.iv summary{cursor:pointer;list-style:none;display:block}details.iv summary small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}details.iv[open] summary{margin-bottom:6px}
 @media(max-width:420px){.cb-vs{grid-template-columns:1fr}.cb-x{text-align:center}}
+
+/* v0.46 engagement: goal ring, Question of the Day, mastery badges */
+.goal-ring{--sz:62px;margin-left:auto;border:0;cursor:pointer;padding:0;background-color:transparent}
+.goal-ring b{font-size:.72rem;letter-spacing:-.02em;display:flex;align-items:center;justify-content:center;line-height:1;margin:auto}
+.goal-ring{display:grid;place-items:center}
+.goal-line{margin:8px 0 0}
+.qotd .opts{margin-top:4px}
+.badge-pill{font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.badge-pill.bronze{background:#F6E3D3;color:#7A3E12}
+.badge-pill.silver{background:#E8EAF2;color:#3A3F5C}
+.badge-pill.gold{background:#FFF1C9;color:#7A5200}
+:root[data-theme="dark"] .badge-pill.bronze{background:#3A2614;color:#F5C49A}
+:root[data-theme="dark"] .badge-pill.silver{background:#2A2E4A;color:#D5D8EA}
+:root[data-theme="dark"] .badge-pill.gold{background:#3A2E0F;color:#FFD66B}
+.mastery-row{padding:4px 0;border-bottom:1px solid var(--line)}
+.mastery-row:last-child{border-bottom:0}
+
+/* ---- v0.46 Remember cards, rank ---- */
+.rc-stage{margin:12px 0;overflow:hidden;padding:4px}
+.rc{min-height:220px;display:flex;flex-direction:column;justify-content:center;cursor:pointer;user-select:none;transition:transform .25s ease,opacity .25s ease;touch-action:pan-y;border-width:2px}
+.rc .rc-k{margin:0 0 6px;font-size:.75rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--saffron)}
+.rc .rc-t{font-size:1.12rem;line-height:1.6;margin:0 0 10px}
+.rc-gap{display:inline-block;min-width:3.2em;padding:0 8px;border-radius:8px;background:var(--sunk);color:var(--accent);font-weight:800;text-align:center}
+.rc-ans{background:var(--good-bg);color:var(--good);font-weight:800;border-radius:6px;padding:0 4px}
+.rc[data-lean="r"]{border-color:var(--good)}
+.rc[data-lean="l"]{border-color:var(--bad)}
+.rc.out-r{transform:translateX(120%) rotate(12deg);opacity:0}
+.rc.out-l{transform:translateX(-120%) rotate(-12deg);opacity:0}
+.rc-act{margin-top:4px}
+.rank-card .rank-n{display:block;font-size:1.15rem;margin:4px 0 8px}
+.rank-card .rank-ic{color:var(--saffron);letter-spacing:2px;font-size:.95rem}
+@media (prefers-reduced-motion:reduce){.rc{transition:none}}
+
+/* ---- v0.46 Day at the Branch, Syllabus map ---- */
+.br-hero{display:flex;gap:14px;align-items:center}
+.br-sun{font-size:2.2rem}
+.br-list{display:grid;gap:6px;margin-top:8px}
+.br-item{display:grid;grid-template-columns:52px 24px 1fr;align-items:center;gap:6px;font-size:.92rem}
+.br-t,.br-clock{font-family:var(--mono);font-weight:800;color:var(--accent)}
+.br-scene{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;padding:10px 12px;border-radius:12px;background:var(--saffron-bg)}
+.br-scene b{color:var(--ink)}
+.br-dots{margin-left:auto;display:flex;gap:4px}
+.br-dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}
+.br-dots i.d{background:var(--good)}
+.br-dots i.c{background:var(--saffron)}
+.linkrow{width:100%;border:0;background:var(--sunk);border-radius:10px;padding:10px 12px;text-align:left;color:var(--ink);cursor:pointer;gap:8px;font:inherit}
+.map{padding:8px}
+.map-row{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(3,minmax(0,1fr));gap:4px;align-items:stretch;width:100%;border:0;background:none;padding:2px 0;text-align:left;color:var(--ink);font:inherit;cursor:pointer}
+.map-head{cursor:default;font-size:.72rem;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.map-head span{padding:4px}
+.map-sec{display:flex;flex-direction:column;padding:6px 4px;min-width:0}
+.map-sec small{overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;font-size:.72rem;line-height:1.3}
+.map-sec small.src{display:block}
+.mc{display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:4px;padding:6px 2px;min-height:48px;font-size:.8rem;color:var(--ink);border:2px solid var(--surface)}
+.mc small{font-size:.7rem;color:var(--muted)}
+.mc.m0{background:var(--sunk)}
+.mc.m1{background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
+.mc.m2{background:color-mix(in srgb,var(--accent) 22%,var(--surface))}
+.mc.m3{background:color-mix(in srgb,var(--accent) 34%,var(--surface))}
+.mc.m4{background:color-mix(in srgb,var(--accent) 48%,var(--surface))}
+.mc.m3 small,.mc.m4 small{color:var(--ink)}
+.mc.na{background:none}
+.map-legend{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center;font-size:.75rem;color:var(--muted);margin:12px 0 6px}
+.map-legend span{display:inline-flex;align-items:center;gap:4px}
+.map-legend .mc{display:inline-block;min-height:0;width:14px;height:14px;padding:0;border:1px solid var(--line)}
+
+/* ---- v0.46.1 nothing wider than the screen ----
+   One element wider than the screen makes Android's WebView widen the whole page, and then the bottom tab bar
+   runs off the right edge too. Tables scroll inside their own box; everything else is held to the screen width. */
+main{overflow-x:clip;max-width:100vw}
+main img,main svg,main video,main canvas{max-width:100%}
+.grid2>*,.stack>*,.card{min-width:0}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:6px 0;max-width:100%}
+.tw>table{margin:0}
+@media (max-width:400px){
+  .lt{font-size:.82rem}
+  .lt th,.lt td{padding:5px 6px}
+}
+.tabbar{max-width:100vw;grid-template-columns:repeat(5,minmax(0,1fr))}
+.tabbar a{min-width:0}
 </style>
 <script>
 /* Demo bridge: free questions only, purchases happen in the Android app. */
@@ -758,10 +838,17 @@ const B = window.AppBridge || {
 };
 const DEBUG = B.isDebug();
 // Called by Billing.java when Play confirms or removes the purchase.
-window.ppOnAccess = () => route();
+window.ppOnAccess = () => { FULL.t = 0; route(); };
 const priceText = () => (B.price && B.price()) || C.price;
 // Each exam is its own purchase. Scale II -> III is the original product full_access.
-const full = () => TR.product === 'full_access' ? B.hasFullAccess() : !!(B.owns && B.owns(TR.product));
+// Cached: unlocked() runs once per question, and every bridge call crosses to the Java thread, which on a phone
+// made screens that scan all questions take a second or more. Refreshed on ppOnAccess and at most every 3 seconds.
+const FULL = { v: false, t: 0 };
+const full = () => {
+  const now = Date.now();
+  if (now - FULL.t > 3000) { FULL.v = TR.product === 'full_access' ? !!B.hasFullAccess() : !!(B.owns && B.owns(TR.product)); FULL.t = now; }
+  return FULL.v;
+};
 if (B.setProduct) B.setProduct(TR.product);
 
 // ---- content ----
@@ -803,7 +890,7 @@ function route() {
   const fn = ROUTES[r] || home;
   $('#title').textContent = TITLES[r] || C.appName;
   $('#topRight').textContent = ''; $('#topRight').className = '';
-  const tab = r === 'legal' && DESC.length ? 'write' : ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal', 'tools', 'blitz', 'planner', 'capsule', 'confuse', 'interview'].includes(r) ? 'more' : 'home');
+  const tab = r === 'legal' && DESC.length ? 'write' : ['recall', 'di', 'mistakes', 'revise'].includes(r) ? 'practice' : ['typing', 'frames', 'toolkit', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'calc', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'toughmock', 'changes', 'facts', 'legal', 'tools', 'blitz', 'planner', 'capsule', 'confuse', 'interview', 'swipe', 'listen', 'branch', 'map'].includes(r) ? 'more' : 'home');
   document.querySelectorAll('.tabbar a').forEach(a => a.dataset.r === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   window.scrollTo(0, 0);
   fn();
@@ -1975,7 +2062,7 @@ function afterMock(pct) {
   if (r.done || r.n >= 3 || pct < 50 || Date.now() - r.at < 14 * 864e5) return;
   const host = V.querySelector('.res-card') || V.querySelector('.card'); if (!host) return;
   host.insertAdjacentHTML('afterend', `<div class="card rate-card" id="rateCard"><div class="rate-stars" aria-hidden="true">★★★★★</div>
-    <b>Enjoying Unnati?</b><p class="src" style="margin:4px 0 10px">A rating on Play helps other candidates find the app. It takes 10 seconds.</p>
+    <b>Rate Unnati on Google Play</b><p class="src" style="margin:4px 0 10px">A rating helps other candidates find the app. It takes 10 seconds.</p>
     <div class="row"><a class="btn" id="rateGo" href="${PLAY_URL}">Rate on Play</a><button class="btn ghost" id="rateNo">Not now</button></div></div>`);
   store.set('rate', { at: Date.now(), n: r.n + 1, done: false });
   if (typeof translateTree === 'function') translateTree($('#rateCard'));
@@ -1998,7 +2085,7 @@ Phone: ${ua ? ua[0] : navigator.platform}
 
 // ---- Hindi labels for the new screens ----
 Object.assign(HI, {
-  'Enjoying Unnati?': 'Unnati पसंद आ रहा है?', 'Rate on Play': 'Play पर रेटिंग दें', 'Not now': 'अभी नहीं',
+  'Rate Unnati on Google Play': 'Google Play पर Unnati को रेटिंग दें', 'Rate on Play': 'Play पर रेटिंग दें', 'Not now': 'अभी नहीं',
   'A rating on Play helps other candidates find the app. It takes 10 seconds.': 'Play पर आपकी रेटिंग दूसरे उम्मीदवारों को यह ऐप खोजने में मदद करती है। बस 10 सेकंड लगते हैं।',
   'Send feedback': 'सुझाव भेजें', 'Problems, ideas or a question we should add': 'समस्या, सुझाव या कोई प्रश्न जो हमें जोड़ना चाहिए',
   'Recall': 'रिकॉल', 'Mistakes': 'गलतियां', 'Mistakes and starred': 'गलतियां और स्टार वाले', 'Mistakes to clear': 'सुधारनी बाकी गलतियां', 'Starred': 'स्टार वाले',
@@ -4564,6 +4651,10 @@ Object.assign(HI, { 'Law Dictionary': 'कानूनी शब्दकोश'
 
 const TOOL_LIST = () => [
   ['capsule', '💊', 'Daily Capsule', '10 questions picked for today: old mistakes, a memory check, new facts', capsuleDone() ? 'Done today ✓' : 'About 5 minutes'],
+  ['branch', '🏦', 'A Day at the Branch', 'Eight situations through one working day; a new day every morning', 'New'],
+  ['map', '🗺️', 'Syllabus map', 'Every section by level: what you have covered, where the next marks are', 'New'],
+  ['swipe', '🃏', 'Remember cards', 'Swipe through key figures and terms; missed cards come back sooner', 'New'],
+  ['listen', '🎧', 'Audio revision', 'Remember lines read aloud, section by section', 'New'],
   ['blitz', '⚡', 'Figure Blitz', '60-second rapid fire on amounts, days, ages and %', store.get('blitzBest', 0) ? 'Best ' + store.get('blitzBest', 0) : 'Beat your best'],
   ['planner', '🎯', 'Marks Planner', 'Your likely score by section, and where the next hour earns most marks', ''],
   ['confuse', '⚖️', 'Confusion Buster', 'Look-alike pairs that trap candidates, with a quick quiz', ''],
@@ -4868,6 +4959,565 @@ ROUTES.more = function () {
 Object.assign(ROUTES, { confuse, interview });
 Object.assign(TITLES, { confuse: 'Confusion Buster', interview: 'Interview Prep' });
 Object.assign(HI, { 'Confusion Buster': 'भ्रम दूर करें', 'Interview Prep': 'इंटरव्यू तैयारी', 'Needs work': 'अभ्यास बाकी', 'Remember:': 'याद रखें:', 'Tip:': 'सुझाव:' });
+</script>
+<script>/* v0.46 engagement, modelled on what the best learning apps do (Duolingo, Khan Academy, Testbook):
+   (1) Question of the Day on Home, shareable as an image to WhatsApp groups (answer not shown, so people open the app);
+   (2) "Share Unnati" in More, after a good mock and on streak milestones;
+   (3) streak freeze: one missed day per 7 is forgiven, so a busy branch day does not wipe a long streak;
+   (4) daily goal (10 / 20 / 40 questions) with a ring on the streak card;
+   (5) section mastery badges (Bronze / Silver / Gold) on Progress and on the Practice section cards;
+   (6) "What's new" sheet once after each update; (7) a light haptic tick on right / wrong answers.
+   Loaded last: wraps ROUTES.home / more / progress / practice and replaces streak() and streakCard(). */
+'use strict';
+
+const PLAY_LINK = 'https://play.google.com/store/apps/details?id=' + BK_APP;
+const SITE_LINK = 'https://unnatiprep.in';
+const shareTxt = t => B.shareText ? B.shareText(t) : (location.href = 'https://wa.me/?text=' + encodeURIComponent(t));
+
+// ---------------------------------------------------------------- (3) streak with one freeze per 7 days
+// Walking back from yesterday (or today if done), a single missed day is bridged when the day before it was studied
+// and no other day was bridged in the previous six. Days bridged this way show a snowflake on the streak card.
+let FROZEN = new Set();
+streak = function () {
+  const d = new Date(); FROZEN = new Set();
+  if (!activeDay(DAYS[dayKey(d)])) d.setDate(d.getDate() - 1);
+  let n = 0, lastFreeze = -99;
+  for (let k = 0; k < 800; k++) {
+    if (activeDay(DAYS[dayKey(d)])) { n++; d.setDate(d.getDate() - 1); continue; }
+    const prev = new Date(d); prev.setDate(prev.getDate() - 1);
+    if (n > 0 && activeDay(DAYS[dayKey(prev)]) && n - lastFreeze >= 6) { FROZEN.add(dayKey(d)); lastFreeze = n; d.setDate(d.getDate() - 1); continue; }
+    break;
+  }
+  return n;
+};
+
+// ---------------------------------------------------------------- (4) daily goal
+const GOALS = [10, 20, 40];
+const goal = () => store.get('goal', 20);
+const todayQ = () => (DAYS[dayKey()] || {}).q || 0;
+
+streakCard = function () {
+  const st = streak(), today = activeDay(DAYS[dayKey()]), g = goal(), q = todayQ(), pct = Math.min(100, Math.round(q / g * 100));
+  const best = Math.max(st, store.get('bestStreak', 0));
+  const days = [...Array(7)].map((_, k) => { const d = new Date(); d.setDate(d.getDate() - (6 - k)); return d; });
+  const dots = days.map(d => {
+    const key = dayKey(d), on = activeDay(DAYS[key]), fz = FROZEN.has(key), isToday = key === dayKey();
+    return `<span class="sd${on ? ' on' : ''}${isToday ? ' today' : ''}" ${fz ? 'title="Streak freeze"' : ''}><i>${on ? '🔥' : fz ? '❄️' : ''}</i><small>${d.toLocaleDateString('en-IN', { weekday: 'narrow' })}</small></span>`;
+  }).join('');
+  const froze = days.some(d => FROZEN.has(dayKey(d)));
+  return `<div class="card streak-card">
+    <div class="sc-head"><span class="flame${st ? '' : ' off'}" aria-hidden="true">🔥</span>
+      <div><b>${st ? st + '-day streak' : 'Start your streak'}</b><small>${today ? 'Today done. Come back tomorrow.' : st ? 'Practise 10 questions today to keep it.' : 'Practise 10 questions or write one answer.'}</small></div>
+      <button class="ring goal-ring" id="goalRing" style="--p:${pct}" aria-label="Daily goal: ${q} of ${g} questions. Tap to change"><b>${Math.min(q, g)}/${g}</b></button></div>
+    <div class="sdots">${dots}</div>
+    <p class="src goal-line">${q >= g ? '🎯 Daily goal reached.' : `Today's goal: ${g} questions.`} ${froze ? '❄️ A streak freeze saved a missed day this week.' : best > 1 ? 'Best streak: ' + best + ' days.' : ''} <button class="linkish" id="goalSet">Change goal</button></p></div>`;
+};
+function goalSheet() {
+  const s = openSheet(`<h2>Daily goal</h2><p class="lede">How many questions do you want to practise each day? Pick what you can do even on a busy branch day.</p>
+    <div class="stack">${GOALS.map(n => `<button class="btn ${n === goal() ? '' : 'ghost'} block" data-g="${n}">${n} questions a day${n === 10 ? ' · light' : n === 20 ? ' · steady' : ' · intensive'}</button>`).join('')}</div>
+    <p class="src" style="margin-top:10px">❄️ Missing one day in a week will not break your streak: a streak freeze covers it automatically.</p>`);
+  s.el.querySelectorAll('[data-g]').forEach(b => b.onclick = () => { store.set('goal', +b.dataset.g); s.close(); route(); });
+}
+
+// ---------------------------------------------------------------- (1) Question of the Day
+function qotdPick() {
+  const pool = MCQ.filter(q => unlocked(q) && q.lvl >= 2 && q.opts.length >= 4 && q.q.length < 220).sort((a, b) => a.id < b.id ? -1 : 1);
+  if (!pool.length) return null;
+  const k = dayKey(), h = [...(TRACK_ID + k)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+  return pool[h % pool.length];
+}
+function qotdCard() {
+  const q = qotdPick(); if (!q) return '';
+  const done = store.get('qotd', {}), res = done.d === dayKey() && done.id === q.id ? done : null;
+  return `<div class="card qotd" id="qotd"><div class="row end"><b>❓ Question of the Day</b><span class="src">${esc(q.sec)}${SEC[q.sec] ? ' · ' + esc(SEC[q.sec].name) : ''}</span></div>
+    <p class="q" style="margin:8px 0">${esc(q.q)}</p>
+    <div class="opts">${q.opts.map((o, k) => `<button class="opt ${res ? (k === q.ans ? 'right' : k === res.pick ? 'wrong' : '') : ''}" data-qo="${k}" ${res ? 'disabled' : ''}><span class="k">${LETTERS[k]}</span><span>${esc(o)}</span></button>`).join('')}</div>
+    ${res ? `<p class="src" style="margin-top:8px">${res.pick === q.ans ? '✅ Correct!' : '❌ Not this time.'} ${q.tk ? '<b>Remember:</b> ' + esc(q.tk) : ''}</p>` : ''}
+    <div class="row" style="margin-top:10px"><button class="btn ghost small" id="qotdShare">📤 Share with colleagues</button></div></div>`;
+}
+function wireQotd() {
+  const box = $('#qotd'); if (!box) return;
+  const q = qotdPick();
+  box.querySelectorAll('[data-qo]').forEach(b => b.onclick = () => {
+    const pick = +b.dataset.qo; store.set('qotd', { d: dayKey(), id: q.id, pick });
+    if (typeof onStudy === 'function') onStudy('q');
+    if (B.haptic) B.haptic(pick === q.ans);
+    box.outerHTML = qotdCard(); wireQotd(); if (typeof translateTree === 'function') translateTree($('#qotd'));
+  });
+  $('#qotdShare').onclick = () => shareQuestion(q);
+}
+function shareQuestion(q) {
+  const W = 1080, H = 1350, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  const g = cv.getContext('2d'), F = 'system-ui, "Segoe UI", Roboto, sans-serif';
+  const bg = g.createLinearGradient(0, 0, W, H); bg.addColorStop(0, '#2B2A8C'); bg.addColorStop(1, '#6D3FD8'); g.fillStyle = bg; g.fillRect(0, 0, W, H);
+  const wrap = (t, x, y, w, lh, font, max = 9) => { g.font = font; const ws = String(t).split(' '); let line = '', n = 0;
+    for (const word of ws) { const tt = line ? line + ' ' + word : word; if (g.measureText(tt).width > w && line) { g.fillText(line, x, y); y += lh; line = word; if (++n >= max) return y; } else line = tt; }
+    if (line) { g.fillText(line, x, y); y += lh; } return y; };
+  g.fillStyle = '#FFE2BE'; g.font = `700 40px ${F}`; g.fillText('❓ Question of the Day', 80, 130);
+  g.fillStyle = '#FFFFFF'; g.globalAlpha = .8; g.font = `500 32px ${F}`; g.fillText('Bank promotion exam practice · ' + new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }), 80, 185); g.globalAlpha = 1;
+  let y = wrap(q.q, 80, 290, W - 160, 62, `700 50px ${F}`, 7) + 30;
+  q.opts.forEach((o, k) => { g.fillStyle = 'rgba(255,255,255,.14)'; g.beginPath(); g.roundRect(70, y - 52, W - 140, 86, 18); g.fill();
+    g.fillStyle = '#FFFFFF'; g.font = `700 38px ${F}`; g.fillText(LETTERS[k], 100, y + 4); wrap(o, 160, y + 4, W - 260, 44, `500 36px ${F}`, 1); y += 104; });
+  g.fillStyle = '#FFE2BE'; g.font = `700 40px ${F}`; g.textAlign = 'center'; g.fillText('Answer + explanation in the Unnati app', W / 2, H - 140);
+  g.fillStyle = '#FFFFFF'; g.font = `500 34px ${F}`; g.fillText('Free on Google Play · unnatiprep.in', W / 2, H - 80);
+  const text = `Question of the Day for bank promotion exams 👆 Try it! Answer, explanation and 3,000 more questions in the Unnati app: ${PLAY_LINK}`;
+  const png = cv.toDataURL('image/png');
+  if (B.shareImage) return B.shareImage(png.split(',')[1], text);
+  shareTxt(text + '\n\n' + q.q + '\n' + q.opts.map((o, k) => LETTERS[k] + ') ' + o).join('\n'));
+}
+
+// ---------------------------------------------------------------- (2) Share Unnati
+function shareApp() {
+  shareTxt(`I am preparing for my bank promotion exam with Unnati: 3,000 questions with sources, real-pattern mocks and help with descriptive answers. Works offline.\n\nप्रमोशन परीक्षा की तैयारी के लिए Unnati ऐप देखें।\n\n${PLAY_LINK}\nFree demo: ${SITE_LINK}`);
+  store.set('shared', (store.get('shared', 0) || 0) + 1);
+}
+function shareNudge() {   // Home: after a 7-day streak or a 60%+ mock, at most once a week, dismissible
+  const m = store.get('mocks', []), last = store.get('shareNudge', 0);
+  if (Date.now() - last < 7 * 864e5 || !(streak() >= 7 || m.some(x => x.pct >= 60))) return '';
+  return `<div class="card share-nudge" id="shareNudge"><b>🤝 Help a colleague prepare</b><p class="src" style="margin:4px 0 10px">You are doing well. Share Unnati with someone appearing for the promotion exam.</p>
+    <div class="row"><button class="btn small" id="snGo">Share Unnati</button><button class="btn ghost small" id="snNo">Not now</button></div></div>`;
+}
+
+// ---------------------------------------------------------------- (5) mastery badges
+const BADGE = [['gold', '🥇', 'Gold', .9, 80], ['silver', '🥈', 'Silver', .6, 65], ['bronze', '🥉', 'Bronze', .3, 50]];
+function badgeOf(s) {
+  if (!s || !s.total || s.acc === null) return null;
+  const cov = s.tried / s.total; return BADGE.find(([, , , c, a]) => cov >= c && s.acc >= a) || null;
+}
+function masteryCard() {
+  const S = sectionStats().filter(s => s.total);
+  return `<div class="card"><b>🏅 Section mastery</b><p class="src" style="margin:4px 0 10px">Bronze: 30% of a section practised at 50% accuracy · Silver: 60% at 65% · Gold: 90% at 80%.</p>
+    <div class="stack">${S.map(s => { const b = badgeOf(s), cov = Math.round(s.tried / s.total * 100);
+      return `<div class="row end mastery-row"><span><b>${esc(s.code)}</b> <small class="src">${esc(s.name)}</small></span><span class="badge-pill ${b ? b[0] : ''}">${b ? b[1] + ' ' + b[2] : `${cov}% done`}</span></div>`; }).join('')}</div></div>`;
+}
+function newBadgeToast() {
+  const S = sectionStats().filter(s => s.total), had = store.get('badges', {}), now = {};
+  S.forEach(s => { const b = badgeOf(s); if (b) now[s.code] = b[0]; });
+  const rank = { bronze: 1, silver: 2, gold: 3 }, up = Object.keys(now).find(c => (rank[now[c]] || 0) > (rank[had[c]] || 0));
+  store.set('badges', now);
+  if (up && Object.keys(had).length + 1 > 0 && store.get('badgesInit', false)) { const b = BADGE.find(x => x[0] === now[up]); toast(`${b[1]} ${b[2]} badge earned in ${up}!`); }
+  store.set('badgesInit', true);
+}
+
+// ---------------------------------------------------------------- (6) what's new
+const WHATS_NEW = { v: '0.46', items: [
+  ['❓', 'Question of the Day on Home. Share it with your colleagues on WhatsApp.'],
+  ['🎯', 'Choose a daily goal: 10, 20 or 40 questions. A ring shows today\'s progress.'],
+  ['❄️', 'Streak freeze: missing one day in a week no longer breaks your streak.'],
+  ['🏅', 'Section mastery badges: Bronze, Silver and Gold on Progress and Practice.'],
+] };
+function whatsNew() {
+  const seen = store.get('seenNew', '');
+  if (seen === WHATS_NEW.v) return;
+  store.set('seenNew', WHATS_NEW.v);
+  if (!store.get('welcomed', false) || document.querySelector('.cele, .sheet')) return;   // new installs: the welcome tour is enough
+  openSheet(`<h2>What's new in Unnati</h2><div class="tour">${WHATS_NEW.items.map(([i, s]) => `<div class="tour-tip"><span aria-hidden="true">${i}</span><p>${esc(s)}</p></div>`).join('')}</div>
+    <button class="btn block" data-close>Got it</button>`);
+}
+
+// ---------------------------------------------------------------- (7) haptics on answers
+document.addEventListener('click', e => {
+  const b = e.target.closest('.opt'); if (!b || !B.haptic || b.dataset.qo) return;
+  setTimeout(() => { if (b.classList.contains('right')) B.haptic(true); else if (b.classList.contains('wrong')) B.haptic(false); }, 0);
+}, true);
+
+// ---------------------------------------------------------------- wiring into screens
+const _homeEngage = ROUTES.home;
+ROUTES.home = function () {
+  _homeEngage();
+  const sc = V.querySelector('.streak-card');
+  if (sc) sc.insertAdjacentHTML('afterend', shareNudge() + qotdCard());
+  $('#goalRing') && ($('#goalRing').onclick = goalSheet); $('#goalSet') && ($('#goalSet').onclick = goalSheet);
+  if ($('#snGo')) { $('#snGo').onclick = () => { store.set('shareNudge', Date.now()); shareApp(); $('#shareNudge').remove(); }; $('#snNo').onclick = () => { store.set('shareNudge', Date.now()); $('#shareNudge').remove(); }; }
+  wireQotd();
+  newBadgeToast();
+  setTimeout(whatsNew, 400);
+};
+const _moreEngage = ROUTES.more;
+ROUTES.more = function () {
+  _moreEngage();
+  const list = V.querySelector('.card.list');
+  if (list) {
+    list.insertAdjacentHTML('afterbegin', `<a class="item" href="#" id="shareAppItem"><span>Share Unnati with a colleague<small>Send the app link on WhatsApp or any app</small></span></a>
+      <a class="item" href="${PLAY_LINK}" id="rateAppItem"><span>Rate Unnati on Google Play<small>★★★★★ A rating helps other candidates find the app</small></span></a>`);
+    $('#shareAppItem').onclick = e => { e.preventDefault(); shareApp(); };
+    $('#rateAppItem').onclick = () => store.set('rate', { at: Date.now(), n: 3, done: true });   // rated from here: stop the after-mock card
+  }
+};
+/** The first full-width block on Progress: the first card, or the grid that holds it (a card dropped into a grid is half width). */
+const progressAnchor = () => { const c = V.querySelector('.card'); return c && c.parentElement.matches('.grid2, .grid3, .stats') ? c.parentElement : c; };
+const _progressEngage = ROUTES.progress;
+ROUTES.progress = function () {
+  _progressEngage();
+  const first = progressAnchor(); if (first) first.insertAdjacentHTML('afterend', masteryCard());
+};
+const _practiceEngage = ROUTES.practice;
+ROUTES.practice = function () {
+  _practiceEngage();
+  const S = Object.fromEntries(sectionStats().map(s => [s.code, s]));
+  V.querySelectorAll('.sec-card[data-c]').forEach(c => { const b = badgeOf(S[c.dataset.c]); if (b) { const t = c.querySelector('.sc-t b'); if (t) t.insertAdjacentHTML('beforeend', ` <span aria-label="${b[2]} badge">${b[1]}</span>`); } });
+};
+// share after a good mock, next to the rating card
+const _afterMockEngage = afterMock;
+afterMock = function (pct) {
+  _afterMockEngage(pct);
+  if (pct < 60) return;
+  const host = V.querySelector('#rateCard') || V.querySelector('.res-card'); if (!host || $('#mockShareApp')) return;
+  host.insertAdjacentHTML('afterend', `<div class="card" id="mockShareApp"><b>🤝 Great score!</b><p class="src" style="margin:4px 0 10px">Know someone preparing for the same exam? Share Unnati with them.</p><button class="btn ghost small" id="msaGo">Share Unnati</button></div>`);
+  $('#msaGo').onclick = shareApp;
+};
+
+Object.assign(HI, {
+  'Question of the Day': 'आज का प्रश्न', 'Share with colleagues': 'साथियों के साथ साझा करें', 'Daily goal': 'दैनिक लक्ष्य', 'Change goal': 'लक्ष्य बदलें',
+  'Section mastery': 'खंड महारत', 'Share Unnati': 'Unnati साझा करें', 'Share Unnati with a colleague': 'किसी साथी के साथ Unnati साझा करें', 'Rate Unnati on Google Play': 'Google Play पर Unnati को रेटिंग दें',
+  'Help a colleague prepare': 'किसी साथी की तैयारी में मदद करें', "What's new in Unnati": 'Unnati में नया क्या है', 'Got it': 'समझ गया', 'Great score!': 'बढ़िया स्कोर!',
+});
+</script>
+<script>/* v0.46 remembering, built only from the app's own reviewed "Remember" lines (q.tk), no new facts:
+   (A) #swipe   Remember cards: the line with its key figure or term hidden; swipe right "I knew it", left "Show me again".
+                Missed cards come back later in the same session and again tomorrow; known cards after 3, 7, 15, 30 days.
+   (B) rank     XP from practice, mocks, study days and cards, and a banking rank ladder from Probationer to General Manager.
+   (E) #listen  Audio revision: Remember lines read aloud by section through Listen mode's playlist player.
+   Loaded after engage.js. */
+'use strict';
+
+const RC_DAYS = [0, 1, 3, 7, 15, 30];
+const rcPool = () => MCQ.filter(q => q.tk && unlocked(q));
+
+// ---------------------------------------------------------------- (A) Remember cards
+/** Hide one figure (amount, %, days, age) or, failing that, the longest capitalised term, so the card asks something. */
+function rcCloze(t) {
+  const m = [...t.matchAll(BLITZ_RE)].map(x => x[0].trim()).filter(s => /\d/.test(s) && !/^\d{4}$/.test(s));
+  let hide = m[0];
+  if (!hide) { const w = (t.match(/\b[A-Z][A-Za-z]{3,}(?:\s[A-Z][A-Za-z]+)*/g) || []).filter(s => t.indexOf(s) > 0).sort((a, b) => b.length - a.length); hide = w[0]; }
+  if (!hide) return null;
+  const i = t.indexOf(hide);
+  return { front: esc(t.slice(0, i)) + '<span class="rc-gap">?</span>' + esc(t.slice(i + hide.length)), hide };
+}
+function swipe() {
+  const RC = store.get('rcards', {}), now = Date.now(), pool = rcPool();
+  const due = pool.filter(q => RC[q.id] && RC[q.id][1] <= now), fresh = pool.filter(q => !RC[q.id]);
+  const known = pool.filter(q => RC[q.id] && RC[q.id][0] >= 3).length;
+  V.innerHTML = `<h2>Remember cards</h2><p class="lede">One "Remember" line at a time with the key figure hidden. Say it in your head, tap to check, then swipe: right if you knew it, left to see it again.</p>
+    <div class="grid2"><div class="card stat"><div class="v">${due.length}</div><div class="k">Due today</div></div><div class="card stat"><div class="v">${fresh.length}</div><div class="k">New cards</div></div></div>
+    <div class="card stat" style="margin-top:10px"><div class="v">${known} <small>/ ${pool.length}</small></div><div class="k">Firmly remembered (known 3 times in a row)</div><div class="meter"><i style="width:${pool.length ? Math.round(known / pool.length * 100) : 0}%"></i></div></div>
+    <div class="stack" style="margin-top:14px">${due.length + fresh.length ? [10, 20].map(n => `<button class="btn ${n === 20 ? 'ghost ' : ''}block" data-n="${n}">${n} cards${n === 10 ? ' · about 3 minutes' : ''}</button>`).join('') : '<button class="btn block" disabled>All caught up. Come back tomorrow</button>'}</div>
+    ${MCQ.some(q => q.tk && !unlocked(q)) ? `<div style="margin-top:12px">${lockCard(MCQ.filter(q => q.tk && !unlocked(q)).length)}</div>` : ''}`;
+  V.querySelectorAll('[data-n]').forEach(b => b.onclick = () => runSwipe(shuffle(due).concat(shuffle(fresh)).filter(q => rcCloze(q.tk)).slice(0, +b.dataset.n)));
+  if (typeof translateTree === 'function') translateTree(V);
+}
+function runSwipe(queue) {
+  const RC = store.get('rcards', {}), missed = new Set(), total = queue.length; let known = 0;
+  const show = () => {
+    if (!queue.length) {
+      onStudy('q');
+      V.innerHTML = `<div class="card center"><div style="font-size:2.4rem" aria-hidden="true">🧠</div><h2>Cards done</h2><p class="lede">${known} of ${total} known first time.${missed.size ? ` ${missed.size} will come back tomorrow.` : ''}</p>
+        <div class="grid2"><button class="btn ghost" onclick="location.hash='tools'">Tools</button><button class="btn" onclick="route()">More cards</button></div></div>`;
+      rankCheck(); return;
+    }
+    const q = queue[0], c = rcCloze(q.tk);
+    V.innerHTML = `<div class="row end"><span class="progress">${total - queue.length + 1} / ${total}</span><span class="tag">${esc(q.sec)}</span></div>
+      <div class="rc-stage"><div class="card rc" id="rc" tabindex="0" aria-live="polite"><p class="rc-k">Remember</p><p class="rc-t" id="rcT">${c.front}</p>
+        <p class="src" id="rcHint">Tap to show the answer</p></div></div>
+      <div class="grid2 rc-act"><button class="btn ghost" id="rcNo">← Show me again</button><button class="btn" id="rcYes">I knew it →</button></div>`;
+    const card = $('#rc'); let open = false;
+    const reveal = () => { if (open) return; open = true; $('#rcT').innerHTML = esc(q.tk).replace(esc(c.hide), `<mark class="rc-ans">${esc(c.hide)}</mark>`); $('#rcHint').innerHTML = listenBtn(q.tk); };
+    const decide = ok => {
+      reveal();
+      if (B.haptic) B.haptic(ok);
+      card.classList.add(ok ? 'out-r' : 'out-l');
+      if (ok) {
+        const box = missed.has(q.id) ? 1 : Math.min(5, ((RC[q.id] || [0])[0]) + 1);
+        RC[q.id] = [box, Date.now() + RC_DAYS[box] * 864e5]; if (!missed.has(q.id)) known++; queue.shift();
+      } else {
+        RC[q.id] = [0, Date.now() + 864e5]; missed.add(q.id); queue.splice(Math.min(3, queue.length), 0, queue.shift());   // back in three cards
+      }
+      store.set('rcards', RC);
+      setTimeout(show, 260);
+    };
+    card.onclick = e => { if (!e.target.closest('.listen')) reveal(); };
+    card.onkeydown = e => { if (e.key === 'ArrowRight') decide(true); else if (e.key === 'ArrowLeft') decide(false); else if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); reveal(); } };
+    $('#rcYes').onclick = () => decide(true); $('#rcNo').onclick = () => decide(false);
+    let x0 = null, dx = 0;
+    card.addEventListener('touchstart', e => { x0 = e.touches[0].clientX; dx = 0; card.style.transition = 'none'; }, { passive: true });
+    card.addEventListener('touchmove', e => { if (x0 === null) return; dx = e.touches[0].clientX - x0; card.style.transform = `translateX(${dx}px) rotate(${dx / 20}deg)`; card.dataset.lean = dx > 40 ? 'r' : dx < -40 ? 'l' : ''; }, { passive: true });
+    card.addEventListener('touchend', () => { card.style.transition = ''; if (Math.abs(dx) > 90) decide(dx > 0); else { card.style.transform = ''; card.dataset.lean = ''; if (Math.abs(dx) < 8) reveal(); } x0 = null; });
+    if (typeof translateTree === 'function') translateTree(V);
+  };
+  show();
+}
+
+// ---------------------------------------------------------------- (B) XP and rank
+const RANKS = [['Probationer', 0], ['Assistant Manager', 1500], ['Manager', 5000], ['Chief Manager', 12000], ['AGM', 22000], ['DGM', 35000], ['General Manager', 50000]];
+/** Worked out from what is already stored, so nothing is counted twice: 2 per answer, +8 more if right, 20 per study day, 60 per mock, 5 per card remembered. */
+function xp() {
+  let a = 0, ok = 0; for (const k in ST) { a += ST[k][0]; ok += ST[k][1]; }
+  const days = Object.values(DAYS).filter(activeDay).length, mocks = (store.get('mocks', []) || []).length;
+  const cards = Object.values(store.get('rcards', {})).filter(r => r[0] > 0).length;
+  return a * 2 + ok * 8 + days * 20 + mocks * 60 + cards * 5;
+}
+function rankOf(x) {
+  let i = 0; while (i + 1 < RANKS.length && x >= RANKS[i + 1][1]) i++;
+  const next = RANKS[i + 1], pct = next ? Math.round((x - RANKS[i][1]) / (next[1] - RANKS[i][1]) * 100) : 100;
+  return { i, name: RANKS[i][0], next: next && next[0], need: next ? next[1] - x : 0, pct };
+}
+function rankCard() {
+  const x = xp(), r = rankOf(x);
+  return `<div class="card rank-card" id="rankCard"><div class="row end"><span class="rank-ic" aria-hidden="true">${'★'.repeat(Math.min(r.i + 1, 7))}</span><span class="tag">${x.toLocaleString('en-IN')} XP</span></div>
+    <b class="rank-n">${esc(r.name)}</b>
+    <div class="meter" aria-hidden="true"><i style="width:${r.pct}%"></i></div>
+    <p class="src" style="margin:6px 0 0">${r.next ? `${r.need.toLocaleString('en-IN')} XP to <b>${esc(r.next)}</b>. Right answers earn the most.` : 'Top rank reached. Keep your streak going.'} <button class="linkish" id="rankHow">How XP works</button></p></div>`;
+}
+function rankSheet() {
+  const r = rankOf(xp());
+  openSheet(`<h2>Your rank</h2><p class="lede">Earn XP every time you study. It is just for fun: it shows how much work you have put in.</p>
+    <div class="stack">${RANKS.map(([n, t], k) => `<div class="row end mastery-row"><span>${k <= r.i ? '✅' : '⬜'} <b>${esc(n)}</b></span><small class="src">${t.toLocaleString('en-IN')} XP</small></div>`).join('')}</div>
+    <p class="src" style="margin-top:10px">Each answer 2 XP, and 8 more if right · each study day 20 · each mock 60 · each Remember card known 5.</p>
+    <button class="btn block" data-close>Got it</button>`);
+}
+function rankCheck() {
+  const r = rankOf(xp()), seen = store.get('rankSeen', -1);
+  if (seen < 0) return store.set('rankSeen', r.i);   // first run: no fanfare for the rank a long-time user already has
+  if (r.i > seen) { store.set('rankSeen', r.i); toast(`🎉 Promoted to ${r.name}!`); if (B.haptic) B.haptic(true); }
+}
+function wireRank() { $('#rankHow') && ($('#rankHow').onclick = rankSheet); rankCheck(); }
+
+// ---------------------------------------------------------------- (E) Audio revision
+function listen() {
+  const pool = rcPool(), secs = M.sections.map(s => [s.code, s.name, pool.filter(q => q.sec === s.code)]).filter(([, , qs]) => qs.length);
+  const miss = pool.filter(q => ST[q.id] && ST[q.id][2]);
+  V.innerHTML = `<h2>Audio revision</h2><p class="lede">Remember lines read aloud with your phone's own voice. Play a section on the way to the branch or during lunch. Next skips a line; Stop ends it.</p>
+    <div class="stack">
+      <button class="card chg-home list-like" data-play="mix"><span class="chg-n">🎧</span><span><b>Quick mix</b><small>20 lines from all sections, about 4 minutes</small></span></button>
+      ${miss.length ? `<button class="card chg-home list-like" data-play="miss"><span class="chg-n">🔁</span><span><b>My mistakes</b><small>${miss.length} lines from questions you got wrong</small></span></button>` : ''}
+      ${secs.map(([c, n, qs]) => `<button class="card chg-home list-like" data-play="${esc(c)}"><span class="chg-n">${esc(c)}</span><span><b>${esc(n)}</b><small>${qs.length} lines${qs.length > 40 ? ' · plays 40 at a time' : ''}</small></span></button>`).join('')}
+    </div>${MCQ.some(q => q.tk && !unlocked(q)) ? `<div style="margin-top:12px">${lockCard(MCQ.filter(q => q.tk && !unlocked(q)).length)}</div>` : ''}`;
+  V.querySelectorAll('[data-play]').forEach(b => b.onclick = () => {
+    const k = b.dataset.play, qs = k === 'mix' ? shuffle(pool).slice(0, 20) : k === 'miss' ? shuffle(miss).slice(0, 40) : shuffle(pool.filter(q => q.sec === k)).slice(0, 40);
+    startSpeech(qs.map(q => q.tk), null, k === 'mix' ? 'Quick mix' : k === 'miss' ? 'My mistakes' : k + ' Remember lines');
+    onStudy('q');
+  });
+  if (typeof translateTree === 'function') translateTree(V);
+}
+
+// ---------------------------------------------------------------- wiring
+Object.assign(ROUTES, { swipe, listen });
+Object.assign(TITLES, { swipe: 'Remember cards', listen: 'Audio revision' });
+const _homeRank = ROUTES.home;
+ROUTES.home = function () {
+  _homeRank();
+  const q = $('#qotd') || V.querySelector('.streak-card'); if (q) { q.insertAdjacentHTML('afterend', rankCard()); wireRank(); }
+};
+const _progressRank = ROUTES.progress;
+ROUTES.progress = function () {
+  _progressRank();
+  const first = progressAnchor(); if (first) { first.insertAdjacentHTML('beforebegin', rankCard()); wireRank(); }
+};
+WHATS_NEW.items.unshift(['🃏', 'Remember cards: swipe through key figures. Missed cards come back sooner.'], ['🎧', 'Audio revision: listen to Remember lines by section.'], ['⭐', 'Earn XP and rise from Probationer to General Manager.']);
+
+Object.assign(HI, {
+  'Remember cards': 'याद रखें कार्ड', 'Audio revision': 'ऑडियो रिवीजन', 'Your rank': 'आपकी रैंक', 'How XP works': 'XP कैसे मिलते हैं',
+  'I knew it →': 'मुझे पता था →', '← Show me again': '← फिर दिखाएँ', 'Cards done': 'कार्ड पूरे', 'Quick mix': 'झटपट मिक्स', 'My mistakes': 'मेरी गलतियाँ',
+  'Due today': 'आज दोहराने हैं', 'New cards': 'नए कार्ड', 'Tap to show the answer': 'उत्तर देखने के लिए टैप करें',
+});
+</script>
+<script>/* v0.46 (C) #branch  A Day at the Branch: eight of the app's own reviewed questions set through one working day,
+                     each at the desk its section belongs to (deposit counter, loan desk, manager's cabin...).
+                     The question text is unchanged; only the desk and the clock are added. Same set all day, a new one tomorrow.
+   (D) #map     Syllabus map: every section of your exam by marks weight, split into Simple / Moderate / Tough,
+                each cell showing how much you have practised and your accuracy, and where the next marks are waiting.
+   Loaded after remember.js. */
+'use strict';
+
+// ---------------------------------------------------------------- (C) A Day at the Branch
+TRACK_KEYS.push('branchDays');   // each exam has its own branch day and its own scores
+const DESK = {
+  S1: ['🏦', 'Deposit counter'], S2: ['📝', 'Loan desk'], S3: ['💳', 'Digital banking help desk'], S4: ['🗂️', 'Branch operations'],
+  S5: ['💱', 'Forex desk'], S6: ['🏛️', 'Government business desk'], S7: ['⚖️', 'Legal file review'], S8: ['📰', 'Morning briefing'],
+  S9: ['🔎', 'Credit monitoring desk'], S10: ['👥', "Manager's cabin"], G1: ['🗂️', 'Branch operations'], IT1: ['🖥️', 'Systems desk'],
+  B1: ['📊', 'Results briefing'], B2: ['📘', 'Policy circular'], P1: ['🧾', 'Counter problem'],
+};
+const deskOf = q => DESK[q.osec || q.sec] || DESK[q.sec] || ['🏦', 'Branch'];
+const SLOTS = ['9:30', '10:15', '11:00', '11:45', '12:30', '14:15', '15:00', '15:45'];
+const DAY_NAME = [[8, 'Outstanding day'], [6, 'Smooth day'], [4, 'Busy day'], [0, 'Tough day']];
+
+/** Same eight for everyone on the same track and date: a seeded shuffle, one question per desk where possible. */
+function branchSet() {
+  let s = [...(TRACK_ID + dayKey())].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+  const rnd = () => (s = (s * 1103515245 + 12345) >>> 0) / 4294967296;
+  const pool = MCQ.filter(q => unlocked(q) && !q.psg && !q.table && q.sec !== 'S11' && q.q.length < 260).sort((a, b) => (a.id < b.id ? -1 : 1));
+  const byDesk = {}; pool.forEach(q => (byDesk[deskOf(q)[1]] = byDesk[deskOf(q)[1]] || []).push(q));
+  const desks = Object.keys(byDesk).sort().map(d => [rnd(), d]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const out = [];
+  for (let round = 0; out.length < 8 && round < 8; round++)
+    for (const d of desks) { const qs = byDesk[d].filter(q => !out.includes(q)); if (qs.length && out.length < 8) out.push(qs[Math.floor(rnd() * qs.length)]); }
+  return out.sort((a, b) => (deskOf(a)[1] === 'Morning briefing' ? -1 : deskOf(b)[1] === 'Morning briefing' ? 1 : 0));   // the news comes first
+}
+function branch() {
+  const set = branchSet(), BD = store.get('branchDays', {}), today = BD[dayKey()];
+  const days = Object.keys(BD).length, best = Math.max(0, ...Object.values(BD));
+  V.innerHTML = `<div class="card br-hero"><div class="br-sun" aria-hidden="true">🏦</div><div><h2 style="margin:0">A Day at the Branch</h2>
+      <p class="lede" style="margin:4px 0 0">Eight situations through one working day, from the morning briefing to closing time. Handle each one correctly to close the day well.</p></div></div>
+    <div class="card"><b>Today's desks</b><div class="br-list">${set.map((q, k) => { const [ic, n] = deskOf(q); return `<div class="br-item"><span class="br-t">${SLOTS[k]}</span><span aria-hidden="true">${ic}</span><span>${esc(n)}</span></div>`; }).join('')}</div></div>
+    ${today !== undefined ? `<p class="src" style="text-align:center">Today you handled ${today} of 8 correctly. You can work the day again for practice; the first score stays.</p>` : ''}
+    <button class="btn block" id="brGo" ${set.length < 8 ? 'disabled' : ''}>${set.length < 8 ? 'Unlock more questions to open the branch' : today !== undefined ? 'Work today again' : 'Open the branch'}</button>
+    ${days ? `<p class="src" style="text-align:center;margin-top:10px">${days} branch day${days > 1 ? 's' : ''} worked · best ${best} / 8 · a new day every morning</p>` : '<p class="src" style="text-align:center;margin-top:10px">A new day every morning.</p>'}`;
+  if (set.length >= 8) $('#brGo').onclick = () => runBranch(set, today === undefined);
+  if (typeof translateTree === 'function') translateTree(V);
+}
+function runBranch(set, first) {
+  let i = 0, score = 0; const miss = [];
+  const show = () => {
+    if (i >= set.length) return close();
+    const q = set[i], [ic, n] = deskOf(q), c = qCard(q, i, set.length);
+    V.innerHTML = `<div class="br-scene"><span class="br-clock">${SLOTS[i]}</span><span aria-hidden="true">${ic}</span><b>${esc(n)}</b><span class="br-dots" aria-label="${i + 1} of 8">${set.map((_, k) => `<i class="${k < i ? 'd' : k === i ? 'c' : ''}"></i>`).join('')}</span></div>`
+      + c.html + `<div class="row end" style="margin-top:12px"><button class="btn ghost" id="brEnd">Leave early</button><button class="btn" id="brNext" hidden>${i === set.length - 1 ? 'Close the branch' : 'Next situation'}</button></div>`;
+    V.querySelector('.opts').onclick = e => {
+      const b = e.target.closest('.opt'); if (!b || V.querySelector('.opt.right')) return;
+      const ok = +b.dataset.o === q.ans; record(q.id, ok); if (ok) score++; else miss.push(q);
+      V.querySelectorAll('.opt').forEach(x => { if (+x.dataset.o === q.ans) x.classList.add('right'); else if (x === b) x.classList.add('wrong'); });
+      $('#fb').innerHTML = explain(q, ok); $('#brNext').hidden = false;
+    };
+    $('#brNext').onclick = () => { i++; show(); window.scrollTo(0, 0); };
+    $('#brEnd').onclick = () => { location.hash = 'branch'; route(); };
+  };
+  const close = () => {
+    const BD = store.get('branchDays', {});
+    if (first) { BD[dayKey()] = score; const ks = Object.keys(BD).sort(); ks.slice(0, Math.max(0, ks.length - 120)).forEach(k => delete BD[k]); store.set('branchDays', BD); }
+    const name = DAY_NAME.find(([m]) => score >= m)[1];
+    V.innerHTML = `<div class="card center"><div style="font-size:2.4rem" aria-hidden="true">${score >= 6 ? '🌇' : '🌆'}</div><h2>Branch closed: ${esc(name)}</h2>
+      <p class="lede">You handled ${score} of 8 situations correctly.${first ? '' : ' (Practice run: today\'s first score is kept.)'}</p></div>
+      ${miss.length ? `<div class="label">Look at these again</div><div class="stack">${miss.map(q => `<div class="card"><small class="src">${esc(deskOf(q)[1])}</small><p style="margin:4px 0">${esc(q.q)}</p><p class="tk"><b>Answer:</b> ${esc(q.opts[q.ans])}</p>${q.tk ? `<p class="src">Remember: ${esc(q.tk)}</p>` : ''}</div>`).join('')}</div>` : ''}
+      <div class="grid2" style="margin-top:12px"><button class="btn ghost" onclick="location.hash='tools'">Tools</button><button class="btn" onclick="location.hash='home'">Home</button></div>`;
+    if (typeof rankCheck === 'function') rankCheck();
+    if (typeof translateTree === 'function') translateTree(V);
+  };
+  show();
+}
+
+// ---------------------------------------------------------------- (D) Syllabus map
+const mapStep = p => p === null ? 0 : p < 25 ? 1 : p < 50 ? 2 : p < 75 ? 3 : 4;   // coverage buckets, one hue light to dark
+function map() {
+  const P = TR.pattern || C.examPattern, mk = s => s.examQs * (s.mk || P.marksEach);
+  const lv = [1, 2, 3].filter(l => MCQ.some(q => (q.lvl || 2) === l));
+  const rows = M.sections.filter(s => s.code !== 'S11').map(s => {
+    const qs = MCQ.filter(q => q.sec === s.code), cells = lv.map(l => {
+      const c = qs.filter(q => (q.lvl || 2) === l); let tr = 0, at = 0, ok = 0;
+      c.forEach(q => { const r = ST[q.id]; if (r) { tr++; at += r[0]; ok += r[1]; } });
+      return { l, n: c.length, tr, acc: at ? Math.round(ok / at * 100) : null, cov: c.length ? Math.round(tr / c.length * 100) : null };
+    });
+    let tr = 0, at = 0, ok = 0; qs.forEach(q => { const r = ST[q.id]; if (r) { tr++; at += r[0]; ok += r[1]; } });
+    const cov = qs.length ? tr / qs.length : 0, acc = at ? ok / at : 0;
+    return { s, m: mk(s), n: qs.length, cells, cov, acc, gap: mk(s) * (1 - cov * acc) };   // marks not yet secured
+  }).filter(r => r.n).sort((a, b) => b.m - a.m);
+  const top = rows.slice().sort((a, b) => b.gap - a.gap).slice(0, 3);
+  V.innerHTML = `<h2>Syllabus map</h2><p class="lede">Your whole exam on one screen. Sections are in order of marks; each box shows how much of that level you have practised and how often you were right. Tap a section to practise it.</p>
+    <div class="card"><b>Where your next marks are</b><p class="src" style="margin:4px 0 8px">Sections that carry many marks and that you have practised least or answer least well.</p>
+      <div class="stack">${top.map((r, k) => `<button class="row end linkrow" data-p="${esc(r.s.code)}"><span><b>${k + 1}. ${esc(r.s.code)}</b> ${esc(r.s.name)}</span><span class="tag">about ${Math.round(r.gap)} marks</span></button>`).join('')}</div></div>
+    <div class="map-legend" aria-hidden="true"><span>Practised:</span>${['0%', '1–24%', '25–49%', '50–74%', '75%+'].map((t, k) => `<span><i class="mc m${k}"></i>${t}</span>`).join('')}</div>
+    <div class="card map" role="table" aria-label="Syllabus map">
+      <div class="map-row map-head" role="row"><span role="columnheader">Section</span>${lv.map(l => `<span role="columnheader">${LV[l]}</span>`).join('')}</div>
+      ${rows.map(r => `<button class="map-row" role="row" data-p="${esc(r.s.code)}" aria-label="${esc(r.s.code)} ${esc(r.s.name)}">
+        <span class="map-sec" role="rowheader"><b>${esc(r.s.code)}</b><small>${esc(r.s.name)}</small><small class="src">${+r.m.toFixed(2)} marks</small></span>
+        ${r.cells.map(c => c.n ? `<span class="mc m${mapStep(c.cov)}" role="cell" title="${LV[c.l]}: ${c.tr} of ${c.n} practised${c.acc === null ? '' : ', ' + c.acc + '% right'}"><b>${c.tr}/${c.n}</b><small>${c.acc === null ? '–' : c.acc + '%'}</small></span>` : '<span class="mc na" role="cell"><small>–</small></span>').join('')}
+      </button>`).join('')}
+    </div>
+    <p class="src">In each box: questions practised / questions in the app, then the percentage you got right. A dash means none yet.</p>`;
+  V.querySelectorAll('[data-p]').forEach(b => b.onclick = () => { pSel = [b.dataset.p]; store.set('pSel', pSel); location.hash = 'practice'; });
+  if (typeof translateTree === 'function') translateTree(V);
+}
+
+// ---------------------------------------------------------------- wiring
+Object.assign(ROUTES, { branch, map });
+Object.assign(TITLES, { branch: 'A Day at the Branch', map: 'Syllabus map' });
+const _syllabusMap = ROUTES.syllabus;
+ROUTES.syllabus = function () {
+  _syllabusMap();
+  const lab = V.querySelector('.label'); if (lab && !syView) lab.insertAdjacentHTML('beforebegin', `<a class="card chg-home" href="#map"><span class="chg-n">🗺️</span><span><b>See your syllabus map</b><small>How much of each section and level you have covered</small></span><span aria-hidden="true">›</span></a>`);
+};
+const _progressMap = ROUTES.progress;
+ROUTES.progress = function () {
+  _progressMap();
+  const r = $('#rankCard'); if (r) r.insertAdjacentHTML('afterend', `<a class="card chg-home" href="#map"><span class="chg-n">🗺️</span><span><b>Syllabus map</b><small>Every section by level: what you have covered and where the next marks are</small></span><span aria-hidden="true">›</span></a>`);
+};
+WHATS_NEW.items.splice(3, 0, ['🏦', 'A Day at the Branch: eight situations through one working day. A new day every morning.'], ['🗺️', 'Syllabus map: your whole exam on one screen, and where your next marks are.']);
+
+Object.assign(HI, {
+  'A Day at the Branch': 'शाखा में एक दिन', 'Syllabus map': 'पाठ्यक्रम मानचित्र', 'Open the branch': 'शाखा खोलें', 'Work today again': 'आज का दिन फिर से करें',
+  "Today's desks": 'आज की डेस्क', 'Next situation': 'अगली स्थिति', 'Close the branch': 'शाखा बंद करें', 'Leave early': 'जल्दी निकलें',
+  'Look at these again': 'इन्हें फिर देखें', 'Where your next marks are': 'आपके अगले अंक कहाँ हैं', 'See your syllabus map': 'अपना पाठ्यक्रम मानचित्र देखें',
+});
+</script>
+<script>/* v0.46.1 smoothness, loaded last:
+   (1) remember heavy results: section stats, Question of the Day and the branch day are worked out once and reused
+       until an answer is recorded or access changes, so Home and Progress no longer scan every question several times;
+   (2) wide tables get their own sideways-scrolling box, also for screens that draw later (legal, prep);
+   (3) Back returns to where you were on the page, not to the top;
+   (4) each bottom tab remembers its last screen: Write → Learn → Practice → Write brings you back to Learn.
+       Tapping the tab you are already in goes to its first screen. */
+'use strict';
+
+// ---------------------------------------------------------------- (1) remember heavy results
+let DATA_V = 0;                                    // bumped by every recorded answer
+const _recordPerf = record;
+record = function (id, ok, g) { DATA_V++; return _recordPerf(id, ok, g); };
+const memo = (fn, key) => { let k = null, v; return function () { const kk = key(); if (kk !== k) { v = fn.apply(this, arguments); k = kk; } return v; }; };
+sectionStats = memo(sectionStats, () => DATA_V + '|' + Object.keys(ST).length + '|' + FULL.v + '|' + MCQ.length);   // key count also catches "Reset progress"
+qotdPick = memo(qotdPick, () => dayKey() + '|' + FULL.v);
+branchSet = memo(branchSet, () => dayKey() + '|' + FULL.v);
+
+// Dates and numbers: toLocaleDateString / toLocaleString build a new formatter on every call, which is slow on phones
+// (Home alone formats a dozen dates). Same output, formatter built once per locale and options.
+const FMT = new Map();
+const fmtOf = (kind, loc, opt) => { const k = kind + (loc || '') + JSON.stringify(opt || {}); let f = FMT.get(k); if (!f) { f = kind === 'd' ? new Intl.DateTimeFormat(loc, opt) : new Intl.NumberFormat(loc, opt); FMT.set(k, f); } return f; };
+const _dateFmt = Date.prototype.toLocaleDateString;
+Date.prototype.toLocaleDateString = function (loc, opt) {
+  if (isNaN(this) || (opt && (opt.hour || opt.minute || opt.timeStyle || opt.dateStyle))) return _dateFmt.call(this, loc, opt);
+  return fmtOf('d', loc, opt).format(this);
+};
+const _numFmt = Number.prototype.toLocaleString;
+Number.prototype.toLocaleString = function (loc, opt) { try { return fmtOf('n', loc, opt).format(this); } catch (e) { return _numFmt.call(this, loc, opt); } };
+
+// ---------------------------------------------------------------- (2) wide tables scroll inside their own box
+function wrapTables(root) {
+  root.querySelectorAll('table').forEach(t => {
+    if (t.parentElement.classList.contains('tw') || t.closest('.di-wrap')) return;
+    const w = document.createElement('div'); w.className = 'tw'; t.before(w); w.appendChild(t);
+  });
+}
+new MutationObserver(() => { wrapTables(V); const a = V.querySelector('.modes [aria-current="page"]'); if (a && a.scrollIntoView && !a.dataset.seen) { a.dataset.seen = 1; a.scrollIntoView({ block: 'nearest', inline: 'center' }); } })
+  .observe(V, { childList: true, subtree: true });
+
+// ---------------------------------------------------------------- (3) Back keeps your place  (4) tabs remember their screen
+const curHash = () => location.hash.slice(1) || 'home';
+const SCROLL = {};                                 // hash -> last scroll position
+const STACK = [curHash()];                         // screens visited, to tell Back from a new screen
+const TAB_LAST = {};                               // bottom tab -> last screen in it
+let restoreTo = null;
+let scrollQueued = false;
+window.addEventListener('scroll', () => {
+  if (scrollQueued) return; scrollQueued = true;
+  requestAnimationFrame(() => { scrollQueued = false; SCROLL[curHash()] = window.scrollY; });
+}, { passive: true });
+const tabOf = () => { const a = document.querySelector('.tabbar a[aria-current="page"]'); return a && a.dataset.r; };
+window.addEventListener('hashchange', () => {
+  const h = curHash();
+  if (STACK.length > 1 && STACK[STACK.length - 2] === h) { STACK.pop(); restoreTo = SCROLL[h] || 0; }   // Back
+  else if (restoreTo === null) { STACK.push(h); if (STACK.length > 60) STACK.shift(); }
+  const t = tabOf(); if (t && ROUTES[h.split('/')[0]]) TAB_LAST[t] = h;
+  if (restoreTo) {
+    const y = restoreTo; restoreTo = null;
+    requestAnimationFrame(() => window.scrollTo(0, y));
+    setTimeout(() => { if (Math.abs(window.scrollY - y) > 40) window.scrollTo(0, y); }, 180);   // screens that finish drawing later
+  } else restoreTo = null;
+});
+document.querySelector('.tabbar') && document.querySelector('.tabbar').addEventListener('click', e => {
+  const a = e.target.closest('a[data-r]'); if (!a) return;
+  const t = a.dataset.r, here = tabOf(), last = TAB_LAST[t];
+  if (t !== here && last && last !== t && last !== curHash()) {       // switching tabs: go back to where you were in that tab
+    e.preventDefault(); restoreTo = SCROLL[last] || 0; STACK.push(last); location.hash = last;
+  }
+}, true);
 </script>
 </body>
 </html>
