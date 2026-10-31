@@ -660,16 +660,11 @@ main img,main svg,main video,main canvas{max-width:100%}
 .topic-notes h4{margin:14px 0 6px;color:var(--accent);font-size:.92rem}
 .tn-list{margin:0;padding-left:18px;display:grid;gap:8px;line-height:1.55}
 .tn-list small{display:block;font-size:.72rem}
-.print-head{display:none}
-@media print{
-  body.print-notes .top,body.print-notes .tabbar,body.print-notes #player,body.print-notes main>*:not(#tnotes){display:none!important}
-  body.print-notes{background:#fff;color:#000;padding:0}
-  body.print-notes main{padding:0;max-width:none}
-  body.print-notes #tnotes{border:0;box-shadow:none;padding:0;margin:0!important}
-  body.print-notes .print-head{display:flex;justify-content:space-between;gap:12px;border-bottom:2px solid #3F3AC7;padding-bottom:6px;margin-bottom:10px;font-size:.85rem}
-  body.print-notes .tn-list li{break-inside:avoid}
-  body.print-notes h3,body.print-notes h4{color:#2B2A8C}
-}
+.topic-notes{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+
+.topic-row .topic-st{align-self:flex-start;font-size:.7rem;padding:1px 8px;margin:2px 0}
+.topic-tally{margin:-4px 0 10px}
+.next-edit{margin:10px 0 0;padding:8px 10px;border-radius:10px;background:var(--saffron-bg);font-size:.9rem}
 </style>
 <script>
 /* Demo bridge: free questions only, purchases happen in the Android app. */
@@ -1069,7 +1064,7 @@ function mock() {
     <div class="card"><table><thead><tr><th>Section</th><th class="n">Exam</th><th class="n">This mock</th></tr></thead><tbody>
     ${M.sections.map(s => { const p = plan.find(x => x.s === s); return `<tr><td>${esc(s.code + ' · ' + s.name)}</td><td class="n">${s.examQs}</td><td class="n">${p ? p.take : 0}</td></tr>`; }).join('')}
     <tr><td><b>Total</b></td><td class="n"><b>${C.examPattern.questions}</b></td><td class="n"><b>${n}</b></td></tr></tbody></table></div>
-    ${n < C.examPattern.questions ? `<p class="src">Only ${n} questions are available${full() ? '' : ' in the free set'}, so this mock is shorter and timed at ${mins} minutes.</p>` : ''}
+    ${n < C.examPattern.questions ? `<p class="src">Only ${n} questions are available${full() ? '' : ' in the free set'}, so this mock is shorter and timed at ${mins} minutes.${full() ? '' : ` Full access gives the complete ${C.examPattern.questions}-question mock.`}</p>` : ''}
     <div style="margin-top:14px"><button class="btn block" id="go" ${n ? '' : 'disabled'}>Start ${mins}-minute mock</button></div>
     ${hist.length ? `<h3>Past mocks</h3><div class="card"><table><tbody>${hist.slice(-6).reverse().map(h => `<tr><td>${esc(h.d)}</td><td class="n">${h.c}/${h.n}</td><td class="n">${h.pct}%</td></tr>`).join('')}</tbody></table></div>` : ''}`;
   $('#go').onclick = () => runMock(plan.flatMap(p => p.s.code === 'S11' ? diForMock(p.take) : shuffle(pool.filter(q => q.sec === p.s.code)).slice(0, p.take)), mins);
@@ -2397,10 +2392,15 @@ function answerCheck(text, x, el, compact = false) {
   const res = pts.map(p => { const k = [...keyStems(p)]; const hit = k.filter(s => mine.has(s)).length; return { p, ok: k.length ? hit >= (k.length <= 2 ? 1 : Math.ceil(k.length * .35)) : false }; });
   const got = res.filter(r => r.ok).length, S = structureChecks(text, x.type);
   if (compact) { el.innerHTML = `<p class="src" style="margin:6px 0">Key points matched: <b>${got} of ${res.length}</b></p>`; return; }
+  // one concrete revision task: the first missing key point, else the first missing structure item
+  const miss = res.find(r => !r.ok), missS = S.find(([, ok]) => !ok);
+  const next = miss ? 'Add this point: ' + (miss.p.length > 110 ? miss.p.slice(0, 107) + '…' : miss.p)
+    : missS ? 'Fix the structure: ' + missS[0] + '.' : 'All key points and structure are covered. Next time, write it within the exam time.';
   el.innerHTML = `<div class="check-box"><div class="row end"><b>Automatic check</b><span class="src">guide only</span></div>
     ${res.length ? `<div class="kp-head">Key points covered: <b>${got} of ${res.length}</b></div><div class="meter"><i style="width:${Math.round(got / res.length * 100)}%"></i></div>
     <ul class="kp">${res.map(r => `<li class="${r.ok ? 'ok' : ''}"><span class="mk" aria-hidden="true">${r.ok ? '✓' : '○'}</span><span data-noi18n>${esc(r.p.length > 130 ? r.p.slice(0, 127) + '…' : r.p)}</span><span class="sr">${r.ok ? 'covered' : 'missing'}</span></li>`).join('')}</ul>` : ''}
     <div class="kp-head">Structure</div><ul class="kp">${S.map(([t, ok]) => `<li class="${ok ? 'ok' : ''}"><span class="mk" aria-hidden="true">${ok ? '✓' : '○'}</span><span>${esc(t)}</span><span class="sr">${ok ? 'yes' : 'no'}</span></li>`).join('')}</ul>
+    <p class="next-edit"><b>Next edit:</b> <span data-noi18n>${esc(next)}</span></p>
     <p class="src" style="margin:8px 0 0">The check matches your words with the model answer. A point written differently can still be right, so mark yourself honestly below.</p></div>`;
 }
 
@@ -2413,7 +2413,7 @@ Object.assign(HI, {
   'Practise questions you have not seen yet.': 'वे प्रश्न हल करें जो अभी तक नहीं देखे।', 'Revise your mistakes until they clear.': 'अपनी गलतियां तब तक दोहराएं जब तक वे सुधर न जाएं।',
   'Take a full timed mock.': 'एक पूरा समयबद्ध मॉक दें।', 'Practise a little every day.': 'रोज़ थोड़ा अभ्यास करें।', 'Your readiness trend appears here from tomorrow.': 'आपकी तैयारी का रुझान कल से यहां दिखेगा।',
   'Mistakes fixed': 'सुधारी गई गलतियां', 'Retention': 'याद रहना', 'Weak subjects': 'कमज़ोर विषय', 'Mistakes not yet revised': 'जिन गलतियों का अभी दोहराव नहीं हुआ', 'Revise them now': 'अभी दोहराएं', 'all caught up': 'सब पूरा',
-  'Automatic check': 'स्वचालित जांच', 'guide only': 'केवल मार्गदर्शन', 'Structure': 'ढांचा', 'Type your answer first to get a key-point check.': 'मुख्य बिंदुओं की जांच के लिए पहले अपना उत्तर टाइप करें।',
+  'Automatic check': 'स्वचालित जांच', 'Next edit:': 'अगला सुधार:', 'guide only': 'केवल मार्गदर्शन', 'Structure': 'ढांचा', 'Type your answer first to get a key-point check.': 'मुख्य बिंदुओं की जांच के लिए पहले अपना उत्तर टाइप करें।',
   'The check matches your words with the model answer. A point written differently can still be right, so mark yourself honestly below.': 'यह जांच आपके शब्दों का मॉडल उत्तर से मिलान करती है। अलग ढंग से लिखा बिंदु भी सही हो सकता है, इसलिए नीचे ईमानदारी से स्वयं अंक दें।',
   'Separate points': 'अलग-अलग बिंदु', 'Names a rule, Act or RBI direction': 'नियम, अधिनियम या RBI निर्देश का उल्लेख', 'Ends with a conclusion': 'निष्कर्ष के साथ समाप्त',
   'Has a FOR side': 'पक्ष (FOR) दिया है', 'Has an AGAINST side': 'विपक्ष (AGAINST) दिया है', 'Steps set out separately': 'कदम अलग-अलग लिखे हैं', 'Cites the rule or procedure': 'नियम या प्रक्रिया का उल्लेख',
@@ -4695,7 +4695,7 @@ Object.assign(HI, { 'Law Dictionary': 'कानूनी शब्दकोश'
 
 const TOOL_LIST = () => [
   ['capsule', '💊', 'Daily Capsule', '10 questions picked for today: old mistakes, a memory check, new facts', capsuleDone() ? 'Done today ✓' : 'About 5 minutes'],
-  ['topics', '📚', 'Study by topic', 'One topic at a time: notes, practice, Remember cards and a PDF', 'New'],
+  ['topics', '📚', 'Study by topic', 'One topic at a time: notes, practice and Remember cards', 'New'],
   ['branch', '🏦', 'A Day at the Branch', 'Eight situations through one working day; a new day every morning', 'New'],
   ['map', '🗺️', 'Syllabus map', 'Every section by level: what you have covered, where the next marks are', 'New'],
   ['swipe', '🃏', 'Remember cards', 'Swipe through key figures and terms; missed cards come back sooner', 'New'],
@@ -5497,7 +5497,8 @@ Object.assign(HI, {
    #topics          every section of your exam, with how many topics each has
    #topics/S1       the topics of one section, each with practised / accuracy
    #topic/S1.current  one topic: practise only this topic, its Remember cards, listen to it, related Law Dictionary words,
-                    and topic notes (its Remember lines and explanations) that can be saved as a PDF.
+                    and topic notes (its Remember lines and explanations), readable in the app only: no PDF export and no
+                    copying, so a buyer cannot pass paid content around (publisher's decision, 31 Oct 2026).
    Topics come from content/topics.json (tools/topics.py --publish), keyed by question id and by the question's own
    source section, so Clerk sections (M1...) show the topics of the sections they draw from.
    Free users see notes and practice from free questions only. Loaded after branch.js. */
@@ -5536,19 +5537,24 @@ async function topics() {
   if (!TOPICS) { V.innerHTML = '<p class="lede">Loading topics…</p>'; await loadTopics(); if (!onRoute('topics')) return; }
   if (code && SEC[code]) return topicList(code);
   const S = M.sections.filter(s => s.code !== 'S11' && MCQ.some(q => q.sec === s.code));
-  V.innerHTML = `<h2>Study by topic</h2><p class="lede">Pick a section, then one topic: current accounts, the NI Act, NPA rules… Read its notes, practise only its questions, and save the notes as a PDF.</p>
+  V.innerHTML = `<h2>Study by topic</h2><p class="lede">Pick a section, then one topic: current accounts, the NI Act, NPA rules… Read its notes and practise only its questions.</p>
     <div class="stack">${S.map(s => { const n = sectionTopics(s.code).length, st = qStats(MCQ.filter(q => q.sec === s.code && unlocked(q)));
       return `<a class="card topic-row" href="#topics/${encodeURIComponent(s.code)}"><span class="tr-t"><b>${icon(s.code)}${esc(s.code)} · ${esc(s.name)}</b>
         <small>${n} topics · ${st.tr}/${st.n} practised${st.acc === null ? '' : ' · ' + st.acc + '% right'}</small><span class="meter"><i style="width:${st.cov}%"></i></span></span><span aria-hidden="true">›</span></a>`; }).join('')}</div>`;
   if (typeof translateTree === 'function') translateTree(V);
 }
+/** Roadmap status of a topic: [class, label]. Mastered = 80% of its open questions practised with 80% right. */
+const topicStatus = st => !st.n ? null : !st.tr ? ['', 'Not started'] : st.cov >= 80 && st.acc >= 80 ? ['gold', 'Mastered'] : ['bronze', 'Practising'];
 function topicList(code) {
   const T = sectionTopics(code);
   $('#title').textContent = code + ' topics';
+  const tally = { 'Not started': 0, Practising: 0, Mastered: 0 };
+  T.forEach(t => { const s = topicStatus(qStats(t.qs.filter(unlocked))); if (s) tally[s[1]]++; });
   V.innerHTML = `<p class="src"><a href="#topics">← All sections</a></p><h2>${icon(code)}${esc(code)} · ${esc(SEC[code].name)}</h2>
     <p class="lede">${T.length} topics. Tap one to read its notes and practise only its questions.</p>
-    <div class="stack">${T.map(t => { const st = qStats(t.qs.filter(unlocked));
-      return `<a class="card topic-row" href="${topicHref(t.key)}"><span class="tr-t"><b>${esc(t.name)}</b>
+    <p class="src topic-tally">🥇 ${tally.Mastered} mastered · 🥉 ${tally.Practising} practising · ${tally['Not started']} not started<br><small>Mastered: 80% of a topic practised with 80% right.</small></p>
+    <div class="stack">${T.map(t => { const st = qStats(t.qs.filter(unlocked)), ts = topicStatus(st);
+      return `<a class="card topic-row" href="${topicHref(t.key)}"><span class="tr-t"><b>${esc(t.name)}</b>${ts ? `<span class="badge-pill ${ts[0]} topic-st">${ts[1]}</span>` : ''}
         <small>${st.n ? `${st.tr}/${st.n} practised${st.acc === null ? '' : ' · ' + st.acc + '% right'}${t.qs.length > st.n ? ' · ' + (t.qs.length - st.n) + ' more in full access' : ''}` : `🔒 Full access · ${t.qs.length} questions`}</small>
         <span class="meter"><i style="width:${st.cov}%"></i></span></span><span aria-hidden="true">›</span></a>`; }).join('')}</div>
     <button class="btn ghost block" id="tlAll" style="margin-top:12px">Practise the whole section</button>`;
@@ -5565,6 +5571,7 @@ async function topic() {
   if (!all.length) { V.innerHTML = '<p class="lede">This topic is not part of your exam.</p><a class="btn" href="#topics">All topics</a>'; return; }
   const name = topicName(key), code = all[0].sec, st = qStats(qs);
   $('#title').textContent = name;
+  store.set('lastTopic', key);   // for the Continue card on Home
   // notes: each Remember line once, then the gist of explanations for questions without one
   const seen = new Set(), points = [], detail = [];
   qs.forEach(q => {
@@ -5580,16 +5587,14 @@ async function topic() {
     <div class="stack topic-actions" style="margin-top:12px">
       <button class="btn block" id="tpGo" ${qs.length ? '' : 'disabled'}>Practise this topic (${Math.min(20, qs.length)} questions)</button>
       <div class="grid2">${cards.length ? `<button class="btn ghost" id="tpCards">🃏 Remember cards</button>` : ''}${points.length ? `<button class="btn ghost" id="tpListen">🎧 Listen</button>` : ''}</div>
-      <button class="btn ghost block" id="tpPdf" ${points.length + detail.length ? '' : 'disabled'}>Save notes as PDF</button>
     </div>
     <div class="card topic-notes" id="tnotes" style="margin-top:12px">
-      <div class="print-head"><b>Unnati Promotion Prep · Topic notes</b><span>${esc(code)} · ${esc(SEC[code] ? SEC[code].name : '')}</span></div>
       <h3 style="margin-top:0">${esc(name)}: notes</h3>
       ${points.length ? `<h4>Key points</h4><ul class="tn-list">${points.map(p => `<li>${esc(p.t)} ${src(p.q)}</li>`).join('')}</ul>` : ''}
       ${detail.length ? `<h4>In detail</h4><ul class="tn-list">${detail.map(p => `<li>${esc(p.t)} ${src(p.q)}</li>`).join('')}</ul>` : ''}
       ${!points.length && !detail.length ? '<p class="src">No notes yet for this topic.</p>' : ''}
       <div id="tpLaw"></div>
-      <p class="src print-foot">Notes are taken from Unnati's reviewed questions, each with its official source and the month it is true as of. Rules change: check the source and follow the latest official circular.</p>
+      <p class="src">Notes are taken from Unnati's reviewed questions, each with its official source and the month it is true as of. Rules change: check the source and follow the latest official circular.</p>
     </div>
     ${all.length > qs.length ? `<div style="margin-top:12px">${lockCard(all.length - qs.length)}</div>` : ''}`;
   $('#tpGo').onclick = () => {
@@ -5598,10 +5603,8 @@ async function topic() {
   };
   if ($('#tpCards')) $('#tpCards').onclick = () => runSwipe(shuffle(cards).slice(0, 20));
   if ($('#tpListen')) $('#tpListen').onclick = () => startSpeech(points.map(p => p.t), null, name);
-  $('#tpPdf').onclick = () => {
-    document.body.classList.add('print-notes');
-    if (B.printPage) B.printPage('Unnati - ' + name); else window.print();
-  };
+  const notes = $('#tnotes');   // notes stay in the app: no selecting, copying or long-press menu
+  ['copy', 'cut', 'contextmenu', 'selectstart'].forEach(ev => notes.addEventListener(ev, e => e.preventDefault()));
   if (typeof translateTree === 'function') translateTree(V);
   topicLaw(all, key);
 }
@@ -5615,16 +5618,56 @@ async function topicLaw(all, key) {
   const box = $('#tpLaw'); if (!box || !words.length) return;
   box.innerHTML = `<h4>Related law words</h4><ul class="tn-list">${words.map(w => `<li><b>${esc(w.w)}</b>: ${esc(w.d)} <small class="src">${esc(w.s)}, ${esc(w.a)}</small></li>`).join('')}</ul>`;
 }
-window.addEventListener('hashchange', () => document.body.classList.remove('print-notes'));
+
+// ---------------------------------------------------------------- after a mock: a repair plan by topic
+// A mock records all its answers at once when it is submitted, so the wrong answers recorded in the last few
+// seconds before afterMock() are this mock's mistakes.
+const RECENT = [];
+const _recordTopic = record;
+record = function (id, ok, g) { RECENT.push({ id, ok, t: Date.now() }); if (RECENT.length > 400) RECENT.splice(0, 200); return _recordTopic(id, ok, g); };
+const _afterMockTopic = afterMock;
+afterMock = function (pct) {
+  _afterMockTopic(pct);
+  const now = Date.now(), ids = new Set(RECENT.filter(r => !r.ok && now - r.t < 10000).map(r => r.id));
+  if (!ids.size) return;
+  loadTopics().then(() => {
+    const host = V.querySelector('.res-card'); if (!host || $('#repair')) return;
+    const wrong = MCQ.filter(q => ids.has(q.id)), count = new Map();
+    wrong.forEach(q => { const k = topicKey(q); if (!k.endsWith('.other')) count.set(k, (count.get(k) || 0) + 1); });
+    const top = [...count.entries()].sort((a, b) => b[1] - a[1]).slice(0, 3);
+    host.insertAdjacentHTML('afterend', `<div class="card" id="repair"><b>🔧 Your repair plan</b>
+      <p class="src" style="margin:4px 0 10px">${top.length ? 'The topics where this mock cost you most. Read the notes, then practise the topic.' : 'Practise the questions you got wrong while they are fresh.'}</p>
+      ${top.length ? `<div class="stack">${top.map(([k, n], i) => `<a class="card topic-row" href="${topicHref(k)}"><span class="tr-t"><b>${i + 1}. ${esc(topicName(k))}</b><small>${n} wrong in this mock</small></span><span aria-hidden="true">›</span></a>`).join('')}</div>` : ''}
+      <button class="btn block" id="repGo" style="margin-top:10px">Practise this mock's mistakes (${Math.min(20, wrong.length)})</button>
+      <p class="src" style="margin:8px 0 0">They are also in your mistake book: answer each correctly twice in a row and it clears. The Daily Capsule brings old mistakes back for review.</p></div>`);
+    $('#repGo').onclick = () => runPractice(shuffle(wrong).slice(0, 20));
+    if (typeof translateTree === 'function') translateTree(V);
+  });
+};
 
 // ---------------------------------------------------------------- wiring
 Object.assign(ROUTES, { topics, topic });
 Object.assign(TITLES, { topics: 'Study by topic', topic: 'Topic' });
+TRACK_KEYS.push('lastTopic');   // each exam remembers its own last topic
+// Home: one tap back to the topic you were studying
+const _homeTopic = ROUTES.home;
+ROUTES.home = function () {
+  _homeTopic();
+  const key = store.get('lastTopic', ''); if (!key) return;
+  loadTopics().then(() => {
+    if (!onRoute('home') && location.hash) return;
+    const qs = MCQ.filter(q => topicKey(q) === key && unlocked(q)), sc = V.querySelector('.streak-card');
+    if (!qs.length || !sc || $('#contTopic')) return;
+    const st = qStats(qs);
+    sc.insertAdjacentHTML('afterend', `<a class="card chg-home" id="contTopic" href="${topicHref(key)}"><span class="chg-n">▶</span><span><b>Continue: ${esc(topicName(key))}</b><small>${st.tr}/${st.n} practised${st.acc === null ? '' : ' · ' + st.acc + '% right'}</small></span><span aria-hidden="true">›</span></a>`);
+    if (typeof translateTree === 'function') translateTree(V);
+  });
+};
 const _practiceTopic = ROUTES.practice;
 ROUTES.practice = function () {
   _practiceTopic();
   const lede = V.querySelector('.lede');
-  if (lede) lede.insertAdjacentHTML('afterend', `<a class="card chg-home" href="#topics"><span class="chg-n">📚</span><span><b>Study by topic</b><small>Current account, NI Act, NPA rules… notes, practice and PDF for one topic at a time</small></span><span aria-hidden="true">›</span></a>`);
+  if (lede) lede.insertAdjacentHTML('afterend', `<a class="card chg-home" href="#topics"><span class="chg-n">📚</span><span><b>Study by topic</b><small>Current account, NI Act, NPA rules… notes and practice for one topic at a time</small></span><span aria-hidden="true">›</span></a>`);
 };
 const _mapTopic = ROUTES.map;
 if (_mapTopic) ROUTES.map = function () {
@@ -5636,15 +5679,15 @@ if (_mapTopic) ROUTES.map = function () {
 WHATS_NEW.v = '0.47';
 WHATS_NEW.items = [
   ['📚', 'Study by topic: pick one topic, such as Current accounts or the NI Act, and practise only its questions.'],
-  ['📝', 'Topic notes from reviewed questions, each with its source. Save them as a PDF.'],
+  ['📝', 'Topic notes from reviewed questions, each with its source.'],
   ['🃏', 'Remember cards and Listen for a single topic.'],
   ['🎨', 'A fresh look: section icons and friendly illustrations.'],
 ];
 
 Object.assign(HI, {
-  'Study by topic': 'विषयवार अध्ययन', 'Practise this topic': 'यह विषय अभ्यास करें', 'Save notes as PDF': 'नोट्स PDF में सहेजें', 'Key points': 'मुख्य बिंदु',
+  'Study by topic': 'विषयवार अध्ययन', 'Practise this topic': 'यह विषय अभ्यास करें', 'Key points': 'मुख्य बिंदु',
   'In detail': 'विस्तार से', 'Related law words': 'संबंधित कानूनी शब्द', 'Practise the whole section': 'पूरा खंड अभ्यास करें', 'Accuracy in this topic': 'इस विषय में सटीकता',
-  '← All sections': '← सभी खंड', 'Questions practised': 'अभ्यास किए गए प्रश्न',
+  '← All sections': '← सभी खंड', 'Your repair plan': 'आपकी सुधार योजना', 'Continue': 'जारी रखें', 'Mastered': 'महारत', 'Practising': 'अभ्यास जारी', 'Not started': 'शुरू नहीं', 'Questions practised': 'अभ्यास किए गए प्रश्न',
 });
 </script>
 <script>/* v0.46.1 smoothness, loaded last:
