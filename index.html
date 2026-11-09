@@ -112,7 +112,11 @@ details p{color:var(--muted);margin:10px 0 0}
 .cta{margin-top:64px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border-radius:26px;padding:42px 28px;text-align:center}
 .cta h2{color:#fff}
 .cta p{opacity:.9;margin:0 auto 20px;max-width:36em}
-.couplet{font-size:1.15rem;color:#ffe2b0;margin:0 0 6px}
+.verse{margin:0 auto 18px;max-width:640px;padding:14px 18px;border-left:3px solid var(--gold);background:rgba(255,255,255,.08);border-radius:10px;text-align:left}
+.verse p{margin:0 0 6px}.verse .sa{font-size:1.2rem;font-weight:700;color:#ffe2b0;line-height:1.5}.verse .hi{color:#fff}.verse .en{opacity:.85;font-style:italic}
+.verse cite{display:block;font-size:.85rem;opacity:.75;font-style:normal}
+.dayline{margin:-12px 0 22px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;max-width:560px}
+.dayline b{display:inline}.dayline small{display:block;opacity:.8}
 footer{margin:48px 0 28px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.92rem;display:flex;flex-wrap:wrap;gap:14px;justify-content:space-between}
 footer a{color:inherit}
 .fine{font-size:.85rem;color:var(--muted)}
@@ -141,7 +145,8 @@ footer a{color:inherit}
     <div class="ctas"><a class="btn play" href="#">Get it on Google Play</a></div>
     <p class="note">Free to download, free questions included · <b>pay once, access for your exam with every update</b> · no login, no ads</p>
     <p class="note">📱 Using an iPhone? The app is for Android for now. Try the <a href="demo.html" style="color:inherit;text-decoration:underline">free demo</a> in Safari, and <a href="mailto:nirvahlabs@gmail.com?subject=iPhone%20version&amp;body=Please%20tell%20me%20when%20Unnati%20is%20available%20on%20iPhone." style="color:inherit;text-decoration:underline">e-mail us "iPhone"</a> to hear first if an iPhone version is made.</p>
-    <p class="motto" lang="hi">इस बार तैयारी पक्की। <span style="opacity:.8">This time, your preparation is solid.</span></p>
+    <p class="motto"><b lang="hi">इस बार प्रमोशन लिस्ट में नाम आपका हो।</b> <span style="opacity:.8">This time, let the promotion list carry your name.</span></p>
+    <p class="dayline" id="dayLine" hidden><span aria-hidden="true">✨</span> <b lang="hi"></b><small></small></p>
   </div>
   <div class="phone" aria-hidden="true"><div class="screen">
     <div class="scr-top">Unnati Promotion Prep</div>
@@ -163,13 +168,14 @@ footer a{color:inherit}
 
 <section id="price">
   <p class="eyebrow">Price</p>
-  <h2>One payment. No subscription. Every update for your exam.</h2>
+  <h2>One-time purchase. No monthly charge. Lifetime access.</h2>
   <div class="grid g3">
     <div class="card"><h3>Scale II → III</h3><p style="font-size:1.9rem;font-weight:800;margin:4px 0">₹1,999</p><p class="fine offer" data-ex="s3"></p><p class="fine">MMGS-II to MMGS-III. Exam on 26 December 2026.</p></div>
     <div class="card"><h3>Scale I → II</h3><p style="font-size:1.9rem;font-weight:800;margin:4px 0">₹1,599</p><p class="fine offer" data-ex="s2"></p><p class="fine">JMGS-I to MMGS-II.</p></div>
     <div class="card"><h3>Clerical → Officer</h3><p style="font-size:1.9rem;font-weight:800;margin:4px 0">₹1,199</p><p class="fine offer" data-ex="jm"></p><p class="fine">Merit channel and Trainee Officer channel.</p></div>
   </div>
   <p class="fine" style="margin-top:12px">Paid once on Google Play for your exam: every question, mock and model answer, and every update for as long as Unnati is offered (<a href="refund.html">what "lifetime access" means</a>). Download and the free question set cost nothing. The offer running today is shown under each price; the app always shows the exact price before you pay.</p>
+  <p class="fine" style="margin-top:6px"><b>7-day refund promise:</b> not happy? Write to nirvahlabs@gmail.com within 7 days of buying, with your Google Play order number, and we refund you (<a href="refund.html">details</a>).</p>
 </section>
 
 <section>
@@ -271,6 +277,8 @@ footer a{color:inherit}
         <li>Each fact shows its source date</li>
         <li>Grows with every app update</li></ul>
       <a class="btn ghost" href="demo.html">Try it in the free demo</a></div>
+    <div class="card"><div class="ic">🔍</div><h3>Search every question</h3><p>Type a word such as "locker", "SARFAESI" or "₹2 lakh" and see every question, answer and "Remember" line on it, across all sections.</p></div>
+    <div class="card"><div class="ic">🗂️</div><h3>Topic-wise study</h3><p>Each section split into syllabus topics (NRI accounts, KCC, NI Act, NPA and more): see the key points of a topic, then practise only that topic.</p></div>
     <div class="card"><div class="ic">🃏</div><h3>Remember cards</h3><p>One "Remember" line at a time with its key figure hidden. Say it in your head, tap to check, then swipe: right if you knew it, left to see it again. Missed cards come back a few cards later and again tomorrow; known ones after 3, 7, 15 and 30 days.</p>
       <a class="btn ghost" href="demo.html">Try it in the free demo</a></div>
     <div class="card"><div class="ic">🎧</div><h3>Audio revision</h3><p>Remember lines read aloud with your phone's own voice, section by section, a quick 20-line mix, or only the questions you got wrong. Revise on the way to the branch or during lunch, no reading needed.</p></div>
@@ -324,7 +332,7 @@ footer a{color:inherit}
     <div class="card"><div class="ic">🆕</div><h3>What changed</h3><p>New rules, limits and charges with what applied before and what applies now; every answer shows its official source and the month it is true as of.</p></div>
     <div class="card"><div class="ic">🧮</div><h3>Banking calculators</h3><p>EMI, drawing power, MPBF, DSCR and NPA provision, each with the formula and a worked example.</p></div>
     <div class="card"><div class="ic">🔥</div><h3>A habit that lasts</h3><p>Question of the Day to share with colleagues, a daily goal of 10, 20 or 40 questions, streaks with a freeze for busy branch days, Bronze, Silver and Gold section badges, and XP ranks from Probationer to General Manager.</p></div>
-    <div class="card"><div class="ic">📴</div><h3>Offline, private, bilingual</h3><p>No login, no ads, no internet needed; progress stays on your phone. Menus and writing help in English or Hindi; light or dark theme.</p></div>
+    <div class="card"><div class="ic">📴</div><h3>Offline, private, bilingual</h3><p>No login, no ads, no internet needed; progress stays on your phone. Menus and writing help in English or Hindi; light or dark mode and four colour themes (violet, ocean, forest, maroon).</p></div>
     <div class="card"><div class="ic">🏳️</div><h3>Report a problem in one tap</h3><p>See something wrong? Tap the flag on any screen. We check every report against the official source and fix it.</p></div>
   </div>
 </section>
@@ -349,6 +357,7 @@ footer a{color:inherit}
   <details><summary>Which exams does Unnati cover?</summary><p>MMGS-II to MMGS-III (objective and descriptive), JMGS-I to MMGS-II (objective with English comprehension), and Clerical to JMGS-I under both the Merit / Normal-cum-Seniority and the Trainee Officer channels (including the essay).</p></details>
   <details><summary>Where does the content come from?</summary><p>Every question is written fresh from public sources such as RBI directions, SBI product pages, Acts of Parliament, official scheme documents and published annual reports. It shows its source, and most answers have a link to the official page so you can check it yourself. Content is reviewed before release and updated when rules change.</p></details>
   <details><summary>How much does it cost?</summary><p>List price: ₹1,999 for Scale II→III, ₹1,599 for Scale I→II and ₹1,199 for Clerical→Officer: a one-time payment on Google Play with lifetime access and all updates. No subscription. Offers with a code: <b>DIWALI</b> until 15 November 2026 (₹1,499 / ₹1,199 / ₹899); <b>UNNATI</b> from 16 November (₹1,699 until 30 November / ₹1,299 until 31 December / ₹999 until 25 December). A colleague who has bought the app can give you a friend code: ₹1,399 / ₹1,099 / ₹849. The app always shows the exact price before you pay.</p></details>
+  <details><summary>Can I get a refund?</summary><p>Yes. Under our 7-day refund promise, write to nirvahlabs@gmail.com within 7 days of buying with the Google Play order number (it starts with GPA.) and we refund you. Google Play's own refund options also apply. See <a href="refund.html">purchase and refunds</a>.</p></details>
   <details><summary>Is there a written exam for Scale II to III this year?</summary><p>Yes. The written examination for promotion from MMGS-II to MMGS-III is scheduled for 26 December 2026 (afternoon). Unnati's Scale II→III track follows the official pattern for that paper.</p></details>
   <details><summary>How do I know the answers are correct?</summary><p>Every question is written from official sources (SBI, RBI, India Code, NABARD, SEBI and others), most carry a clickable source link, and all cited SBI pages are re-checked live before each update. When a rule changes, we correct the question and show the change. <a href="accuracy.html">See how we check answers</a>.</p></details>
   <details><summary>Are the questions in Hindi?</summary><p>The questions are in English, as in the exam. Menus are available in Hindi, and the writing toolkit gives Hindi meanings of banking terms and Hindi-to-English help for the descriptive paper.</p></details>
@@ -362,7 +371,12 @@ footer a{color:inherit}
 </section>
 
 <div class="cta">
-  <p class="couplet" lang="hi">गिरते हैं शहसवार ही मैदान-ए-जंग में</p>
+  <blockquote class="verse">
+    <p class="sa" lang="sa">विघ्नैः पुनः पुनरपि प्रतिहन्यमानाः<br>प्रारब्धमुत्तमजना न परित्यजन्ति॥</p>
+    <p class="hi" lang="hi">बार-बार बाधाएँ आएँ, फिर भी श्रेष्ठ लोग शुरू किया काम नहीं छोड़ते।</p>
+    <p class="en">However often obstacles strike, the best never give up what they have begun.</p>
+    <cite>भर्तृहरि, नीतिशतक · Bhartrihari, Nitishatakam</cite>
+  </blockquote>
   <h2>A past attempt is not a failure. It is the start of a better preparation.</h2>
   <p>Begin today with the free questions. Ten minutes a day, every day, until the exam.</p>
   <a class="btn play" href="#">Get Unnati on Google Play</a>
@@ -453,6 +467,10 @@ drawQ();
                      : t <= x.ft ? 'With a colleague’s friend code: <b>' + x.f + '</b>' : '';
   });
 })();
+</script>
+<script>
+/* Line for the day: the same lines as the app's Home screen, a new one each day (India time). The first is already the motto above, so it is skipped. */
+(function(){var L=[["पिछली बार कुछ अंकों से रह गए? इस बार हर अंक पक्का।", "Missed by a few marks last time? This time, make every mark count."], ["तैयारी भी ब्याज की तरह है: रोज़ थोड़ा, और चक्रवृद्धि बढ़त।", "Preparation works like interest: a little daily, compounding growth."], ["दिन भर दूसरों के खाते संभालते हैं, आज अपने करियर का खाता खोलिए।", "All day you manage others' accounts. Today, open one for your career."], ["चाय के ब्रेक में 10 प्रश्न, साल के अंत में नई कुर्सी।", "10 questions in a tea break, a new chair by year end."], ["अनुभव आपके पास सालों का है, तैयारी बस 20 मिनट रोज़ की।", "You have years of experience; preparation needs just 20 minutes a day."], ["प्रमोशन किस्मत से नहीं, तैयारी से मिलता है।", "Promotion comes from preparation, not luck."], ["जो नियम आप रोज़ काउंटर पर लागू करते हैं, वही परीक्षा में पूछे जाते हैं।", "The rules you apply at the counter every day are what the exam asks."], ["नया पद, नया सम्मान, और घर पर गर्व का एक दिन। शुरुआत आज के पहले प्रश्न से।", "A new post, new respect, and a proud day at home. It starts with today's first question."]];var e=document.getElementById("dayLine");if(!e)return;var n=Math.floor((Date.now()+5.5*36e5)/864e5),l=L[n%L.length];e.querySelector("b").textContent=l[0];e.querySelector("small").textContent=l[1];e.hidden=false;})();
 </script>
 </body>
 </html>
