@@ -5838,7 +5838,9 @@ function topicList(code) {
 }
 
 // ---------------------------------------------------------------- #topic/S1.current
-const firstSentences = (t, n = 2) => (String(t).match(/[^.!?]+[.!?]+(\s|$)/g) || [t]).slice(0, n).join('').trim();
+// A sentence ends only at . ! ? followed by a space or the end, so "₹1.5 lakh", "7.5%" and "rbi.org.in" stay whole.
+// (The old pattern skipped any text before a decimal point: "₹250 to ₹1.5 lakh a year" became "5 lakh a year.")
+const firstSentences = (t, n = 2) => (String(t).match(/\S[\s\S]*?[.!?]+(?=\s|$)/g) || [t]).slice(0, n).join(' ').replace(/\s+/g, ' ').trim();
 async function topic() {
   const key = decodeURIComponent(location.hash.split('/')[1] || '');
   if (!TOPICS) { V.innerHTML = '<p class="lede">Loading topic…</p>'; await loadTopics(); if (!onRoute('topic')) return; }
