@@ -4992,17 +4992,26 @@ function tools() {
 // ---------------------------------------------------------------- Figure Blitz
 const BLITZ_RE = /₹\s?[\d,.]+(\s?(lakh|crore))?|\$\s?[\d,.]+(\s?(million|billion))?|\b\d[\d,.]*\s?(%|bps|lakh|crore|working days|days|hours|months|years|weeks)?(?![\w\d])/gi;
 const blitzUnit = t => (t.match(/₹|\$|%|bps|lakh|crore|day|hour|month|year|week/i) || ['n'])[0].toLowerCase().replace(/s$/, '');
+/** Figures in a line with their exact position. Trailing . or , belong to the sentence, not the figure.
+    Blanking uses the position, never a text search: searching "3" in "₹30 lakh … 3-year" would blank the 3 of 30. */
+function figTokens(t) {
+  return [...String(t).matchAll(BLITZ_RE)].map(x => {
+    const lead = x[0].length - x[0].trimStart().length, s = x[0].trim().replace(/[.,]+$/, '');
+    return { s, i: x.index + lead };
+  }).filter(f => /\d/.test(f.s) && !/^\d{4}$/.test(f.s));
+}
+const blankAt = (t, f, gap) => t.slice(0, f.i) + gap + t.slice(f.i + f.s.length);
 function blitzItems() {
   const facts = MCQ.filter(q => q.tk && unlocked(q));
   const all = [];
-  facts.forEach(q => { const m = [...q.tk.matchAll(BLITZ_RE)].map(x => x[0].trim()).filter(t => /\d/.test(t) && !/^\d{4}$/.test(t)); if (m.length) all.push({ q, toks: m }); });
+  facts.forEach(q => { const figs = figTokens(q.tk); if (figs.length) all.push({ q, figs, toks: figs.map(f => f.s) }); });
   const byUnit = {};
   all.forEach(f => f.toks.forEach(t => { const u = blitzUnit(t); (byUnit[u] = byUnit[u] || new Set()).add(t); }));
   return all.map(f => {
-    const ans = f.toks[Math.floor(Math.random() * f.toks.length)], pool = [...(byUnit[blitzUnit(ans)] || [])].filter(t => t !== ans && !f.toks.includes(t));
+    const fig = f.figs[Math.floor(Math.random() * f.figs.length)], ans = fig.s, pool = [...(byUnit[blitzUnit(ans)] || [])].filter(t => t !== ans && !f.toks.includes(t));
     if (pool.length < 3) return null;
     const wrong = pool.sort(() => Math.random() - .5).slice(0, 3);
-    return { q: f.q, ans, text: f.q.tk.replace(ans, '_____'), opts: [ans, ...wrong].sort(() => Math.random() - .5) };
+    return { q: f.q, ans, text: blankAt(f.q.tk, fig, '_____'), opts: [ans, ...wrong].sort(() => Math.random() - .5) };
   }).filter(Boolean).sort(() => Math.random() - .5);
 }
 function blitz() {
@@ -5505,11 +5514,10 @@ const rcPool = () => MCQ.filter(q => q.tk && unlocked(q));
 // ---------------------------------------------------------------- (A) Remember cards
 /** Hide one figure (amount, %, days, age) or, failing that, the longest capitalised term, so the card asks something. */
 function rcCloze(t) {
-  const m = [...t.matchAll(BLITZ_RE)].map(x => x[0].trim()).filter(s => /\d/.test(s) && !/^\d{4}$/.test(s));
-  let hide = m[0];
-  if (!hide) { const w = (t.match(/\b[A-Z][A-Za-z]{3,}(?:\s[A-Z][A-Za-z]+)*/g) || []).filter(s => t.indexOf(s) > 0).sort((a, b) => b.length - a.length); hide = w[0]; }
+  const fig = figTokens(t)[0];   // exact position of the first figure (tools.js), never a text search
+  let hide = fig && fig.s, i = fig ? fig.i : -1;
+  if (!hide) { const w = [...t.matchAll(/\b[A-Z][A-Za-z]{3,}(?:\s[A-Z][A-Za-z]+)*/g)].filter(x => x.index > 0).sort((a, b) => b[0].length - a[0].length)[0]; if (w) { hide = w[0]; i = w.index; } }
   if (!hide) return null;
-  const i = t.indexOf(hide);
   return { front: esc(t.slice(0, i)) + '<span class="rc-gap">?</span>' + esc(t.slice(i + hide.length)), hide };
 }
 function swipe() {
@@ -6694,8 +6702,9 @@ V.addEventListener('click', e => {
 });
 
 // "What's new" for v0.48: shown once to people updating from v0.47
-WHATS_NEW.v = '0.48';
+WHATS_NEW.v = '0.48.1';
 WHATS_NEW.items = [
+  ['🛠️', 'Fixed: topic notes now show amounts with decimals in full (for example, Sukanya Samriddhi: ₹250 to ₹1.5 lakh a year). The questions themselves were always correct.'],
   ['▶️', 'Today’s practice on Home: one tap starts your questions for the day.'],
   ['✅', 'Livelier answers: a tick or cross, the XP you earn, and the next question slides in.'],
   ['📚', '270 new exam-level questions: banking law, digital payments, priority sector and more.'],
