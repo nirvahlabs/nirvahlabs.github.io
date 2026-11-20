@@ -2035,7 +2035,7 @@ function notes() {
     <div class="card"><label class="f" for="nt">Title</label><input type="text" id="nt" maxlength="120">
     <label class="f" for="nb">Note</label><textarea id="nb" style="min-height:120px"></textarea>
     <div style="margin-top:10px"><button class="btn" id="add">Save note</button></div></div>
-    <div class="card" style="margin-top:12px">${N.length ? N.slice().reverse().map(n => `<div class="note-item"><div class="row end"><b>${esc(n.t || 'Untitled')}</b><span>${listenBtn((n.t ? n.t + '. ' : '') + n.b)}<button class="linkish" data-del="${n.id}">Delete</button></span></div><p>${esc(n.b)}</p><span class="src">${esc(n.d)}</span></div>`).join('') : '<p class="src">No notes yet.</p>'}</div>`;
+    <div class="card" style="margin-top:12px">${N.length ? N.slice().reverse().map(n => `<div class="note-item"><div class="row end"><b>${esc(n.t || 'Untitled')}</b><span>${listenBtn((n.t ? n.t + '. ' : '') + n.b)}<button class="linkish" data-del="${esc(n.id)}">Delete</button></span></div><p>${esc(n.b)}</p><span class="src">${esc(n.d)}</span></div>`).join('') : '<p class="src">No notes yet.</p>'}</div>`;
   $('#add').onclick = () => { const t = $('#nt').value.trim(), b = $('#nb').value.trim(); if (!b) return toast('Write something in the note first.'); N.push({ id: Date.now(), t, b, d: new Date().toLocaleDateString('en-IN') }); store.set('notes', N); notes(); toast('Note saved'); };
   V.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { store.set('notes', N.filter(n => n.id !== +b.dataset.del)); notes(); });
 }
@@ -2049,7 +2049,7 @@ function myq() {
     <label class="f" for="ma">Correct option</label><select id="ma">${[0, 1, 2, 3, 4].map(k => `<option value="${k}">${LETTERS[k]}</option>`).join('')}</select>
     <label class="f" for="me">Explanation (optional)</label><input type="text" id="me">
     <div style="margin-top:12px"><button class="btn" id="add">Add question</button></div></div>
-    <div class="card" style="margin-top:12px">${Q.length ? Q.slice().reverse().map(q => `<div class="note-item"><div class="row end"><b>${esc(q.q)}</b><button class="linkish" data-del="${q.id}">Delete</button></div><p class="src">Answer: ${esc(q.opts[q.ans])}</p></div>`).join('') : '<p class="src">No questions added yet.</p>'}</div>`;
+    <div class="card" style="margin-top:12px">${Q.length ? Q.slice().reverse().map(q => `<div class="note-item"><div class="row end"><b>${esc(q.q)}</b><button class="linkish" data-del="${esc(q.id)}">Delete</button></div><p class="src">Answer: ${esc(q.opts[q.ans])}</p></div>`).join('') : '<p class="src">No questions added yet.</p>'}</div>`;
   $('#add').onclick = () => {
     const q = $('#mq').value.trim(), opts = [0, 1, 2, 3, 4].map(k => $('#mo' + k).value.trim()).filter((o, k) => k < 4 || o);
     if (!q || opts.slice(0, 4).some(o => !o)) return toast('Fill in the question and options A to D (E is optional).');
@@ -2563,8 +2563,21 @@ window.ppOnBackupOpened = text => {
     <p class="lede" style="margin:0">Restoring replaces the progress now on this phone.</p>
     <div class="row"><button class="btn" id="rsYes">Restore</button><button class="btn ghost" onclick="route()">Cancel</button></div></div>`;
   $('#rsYes').onclick = () => {
-    Object.keys(localStorage).filter(k => k.startsWith('pp.')).forEach(k => localStorage.removeItem(k));
-    Object.entries(b.data).forEach(([k, v]) => { if (k.startsWith('pp.') && typeof v === 'string') localStorage.setItem(k, v); });
+    // v0.59 (audit M2, M3): only app keys whose values are valid JSON are taken, and the progress now on the phone is
+    // kept aside until every write has succeeded. A failed write (phone storage full) puts it back unchanged.
+    const take = Object.entries(b.data).filter(([k, v]) => {
+      if (!/^pp\.[\w.-]{1,60}$/.test(k) || typeof v !== 'string' || v.length > 5e6) return false;
+      try { JSON.parse(v); return true; } catch (e) { return false; }
+    });
+    const keep = Object.keys(localStorage).filter(k => k.startsWith('pp.')).map(k => [k, localStorage.getItem(k)]);
+    try {
+      keep.forEach(([k]) => localStorage.removeItem(k));
+      take.forEach(([k, v]) => localStorage.setItem(k, v));
+    } catch (err) {
+      Object.keys(localStorage).filter(k => k.startsWith('pp.')).forEach(k => localStorage.removeItem(k));
+      keep.forEach(([k, v]) => { try { localStorage.setItem(k, v); } catch (e) { /* best effort while putting back */ } });
+      return toast('Could not restore: the phone storage is full. Your progress is unchanged.');
+    }
     const r = store.get('remind', null); if (r && B.setReminder) { const [h, m] = (r.t || '19:00').split(':').map(Number); B.setReminder(!!r.on, h, m); }
     location.hash = 'home'; location.reload();
   };
@@ -3376,6 +3389,7 @@ function refer() {
 Object.assign(ROUTES, { unlock, refer });
 Object.assign(TITLES, { unlock: 'Unlock full access', refer: 'Your friend code' });
 Object.assign(HI, {
+  'Could not restore: the phone storage is full. Your progress is unchanged.': 'बैकअप वापस नहीं आ सका: फ़ोन की स्टोरेज भरी है। आपकी प्रगति जैसी थी वैसी है।',
   'See everything included': 'शामिल सब कुछ देखें', 'Practice questions': 'अभ्यास प्रश्न', 'Descriptive questions': 'डिस्क्रिप्टिव प्रश्न',
   'Mock series papers': 'मॉक सीरीज़ पेपर', 'Sectional tests': 'सेक्शनल टेस्ट', 'Future updates': 'भविष्य के अपडेट',
   'Free set only': 'केवल मुफ़्त सेट', 'All, for life': 'सब, हमेशा के लिए', 'On every question': 'हर प्रश्न पर', 'Up to 10': '10 तक', 'one-time · lifetime access': 'एक बार · हमेशा के लिए',
@@ -7161,14 +7175,15 @@ V.addEventListener('click', e => {
 });
 
 // "What's new" for v0.48: shown once to people updating from v0.47
-WHATS_NEW.v = '0.58';
-WHATS_NEW.items = [   // since v0.55, the version on Play (v0.56 and v0.57 were never uploaded)
+WHATS_NEW.v = '0.59';
+WHATS_NEW.items = [   // since v0.55, the version on Play (v0.56 to v0.58 were never uploaded)
   ['🏠', 'A cleaner Home: today’s practice, your streak and the Question of the Day on top; everything else under “More for you”.'],
   ['▶️', 'Continue where you left off: a practice session you left half-way waits for you on Home, with a progress bar as you go.'],
   ['🩺', 'Free 10-minute check-up on Home: 20 questions, two from each section, then your strong and weak sections.'],
   ['🔔', 'The 7 pm reminder now shows the day’s Question of the Day. Tap it to answer.'],
   ['💳', 'Payments made easier: when a UPI payment takes a minute to confirm, full access opens as soon as you come back to the app. If a payment does not go through, a clear message says why, and that you were not charged. While Google Play is still confirming, the Unlock screen says so, so you never pay twice.'],
   ['⬅️', 'The phone’s back button goes to the previous screen on every Android version, including Android 16.'],
+  ['🔒', 'Safer: purchases are checked against Google Play’s own signature, and restoring a backup can no longer lose your progress if the phone runs out of space.'],
   ['🛠️', 'Steadier and easier to read: no blank screens if Android closed the app in the background, celebrations wait until a session ends, and the app follows your phone’s text size.'],
 ];
 
