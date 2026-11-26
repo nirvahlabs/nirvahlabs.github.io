@@ -1981,8 +1981,8 @@ function route() {
   $('#title').textContent = TITLES[r] || C.appName;
   $('#topRight').textContent = ''; $('#topRight').className = '';
   // v0.65: six tabs. Learn holds everything to read and remember; Practice holds practice; More holds my study and settings.
-  const LEARN_R = ['library', 'topics', 'topic', 'confuse', 'changes', 'facts', 'swipe', 'listen', 'listenq', 'numbers', 'numfam', 'numladder', 'numrange', 'numdrill', 'numrule', 'danger', 'tools', 'blitz', 'capsule', 'branch', 'map', 'planner', 'interview', 'calc', 'legal'];
-  const tab = LEARN_R.includes(r) ? 'library' : ['recall', 'di', 'mistakes', 'revise', 'sections', 'seclearn', 'session', 'search'].includes(r) ? 'practice' : ['paper', 'myans', 'dlist', 'typing', 'frames', 'toolkit', 'cases', 'case', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel', 'series', 'toughmock'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'feedback', 'journey', 'plan'].includes(r) ? 'more' : 'home');
+  const LEARN_R = ['library', 'topics', 'topic', 'confuse', 'changes', 'facts', 'swipe', 'listen', 'listenq', 'numbers', 'numfam', 'numladder', 'numrange', 'numdrill', 'numrule', 'danger', 'tools', 'blitz', 'capsule', 'branch', 'interview', 'calc', 'legal'];
+  const tab = LEARN_R.includes(r) ? 'library' : ['recall', 'di', 'mistakes', 'revise', 'sections', 'seclearn', 'session', 'search'].includes(r) ? 'practice' : ['paper', 'myans', 'dlist', 'typing', 'frames', 'toolkit', 'cases', 'case', 'learn', 'learnbc', 'learnrat', 'learnfa', 'learnsit', 'learncomp', 'learnessay'].includes(r) ? 'write' : ['exam', 'sectional', 'duel', 'series', 'toughmock'].includes(r) ? 'mock' : ['practice', 'mock', 'write', 'more', 'home'].includes(r) ? r : (['notes', 'myq', 'settings', 'about', 'progress', 'planner', 'map', 'final', 'unlock', 'refer', 'syllabus', 'guide', 'track', 'revbook', 'feedback', 'journey', 'plan'].includes(r) ? 'more' : 'home');
   document.querySelectorAll('.tabbar a').forEach(a => a.dataset.r === tab ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current'));
   window.scrollTo(0, 0);
   // v0.56 safety net: an error inside one screen used to leave a blank or half-drawn page with no way forward.
@@ -2068,8 +2068,9 @@ function practice() {
     <div class="chips" id="lv">${[[0, 'All'], [1, 'Simple'], [2, 'Moderate'], [3, 'Tough']].map(([v, n]) => `<button class="chip" data-v="${v}" aria-pressed="${v === pLv}">${n}</button>`).join('')}</div>
     <div class="label">Questions per session</div>
     <div class="chips" id="ns">${[10, 20, 40].map(n => `<button class="chip" data-n="${n}" aria-pressed="${n === pN}">${n}</button>`).join('')}</div>
-    <div style="margin-top:18px"><button class="btn block" id="go">Start practice</button></div></details>
-    <div style="margin-top:14px">${lockCard(pool.length - pool.filter(unlocked).length)}</div>${typeof lockedPreview === 'function' ? lockedPreview(pool) : ''}`;
+    <div style="margin-top:18px"><button class="btn block" id="go">Start practice</button></div></details>`;
+  // v0.67 (the publisher, 26 Nov 2026: "we do enough for unlock advertisement"): no lock card or locked-question
+  // preview on the Practice tab. Home, the plan line, the check-up and the Unlock screen carry the offer.
   const mx = $('#pxMix'); if (mx) mx.addEventListener('toggle', () => store.set('pxMix', mx.open));
   $('#clr').onclick = () => { pSel = []; store.set('pSel', pSel); document.querySelectorAll('#secs .sec-card').forEach(x => x.setAttribute('aria-pressed', false)); };
   $('#secs').onclick = e => { const b = e.target.closest('.sec-card'); if (!b) return; const c = b.dataset.c; pSel = pSel.includes(c) ? pSel.filter(x => x !== c) : pSel.concat(c); store.set('pSel', pSel); b.setAttribute('aria-pressed', pSel.includes(c)); };
@@ -2610,7 +2611,8 @@ function runRecall(queue) {
 }
 
 /** Switch between the three practice modes. */
-const PRACTICE_MODES = [['practice', 'MCQs'], ['recall', 'Recall'], ['di', 'DI sets'], ['mistakes', 'Mistakes']];
+// v0.67: "Recall" left the bar; Remember cards (Learn) and Listen & test do the same job. #recall still opens.
+const PRACTICE_MODES = [['practice', 'MCQs'], ['mistakes', 'Mistakes'], ['di', 'DI sets']];
 const WRITE_MODES = [['write', 'Answers'], ['learn', 'Learn'], ['typing', 'Typing'], ['frames', 'Frames']];
 const modeBar = (active, modes = PRACTICE_MODES) => `<div class="modes">${modes.map(([r, t]) => `<a href="#${r}" ${r === active ? 'aria-current="page"' : ''}>${t}</a>`).join('')}</div>`;
 
@@ -7869,6 +7871,8 @@ const reassure = () => `<div class="cv-sure" data-noi18n>
            `संतुष्ट नहीं? खरीद के ${REFUND_DAYS} दिन के भीतर <b>${esc(C.supportEmail || 'nirvahlabs@gmail.com')}</b> पर ईमेल करें, पूरा पैसा वापस।`)}</p>
   <p>📴 ${T('Works offline · No subscription · Lifetime access for your exam', 'ऑफ़लाइन चलता है · कोई सब्सक्रिप्शन नहीं · आपकी परीक्षा के लिए हमेशा')}</p></div>`;
 
+// v0.67: the locked-question preview and the after-session unlock box are off (read in lockedPreview and buyhelp.js)
+const LOCKED_PREVIEW_ON = false;
 // 3. free questions done so far; progress carries into full access (lockCard adds this, with "pay once")
 function lockExtra() {
   const free = MCQ.filter(q => q.free), done = free.filter(q => ST[q.id]).length;
@@ -7879,7 +7883,9 @@ function lockExtra() {
 
 // 4. the opening words of the next locked question; options, answer and explanation are never put on the screen
 function lockedPreview(pool) {
-  if (full() || !pool) return '';
+  // v0.67: switched off everywhere at the publisher's request ("remove next question full access unlock"); kept as a
+  // function so older callers (topic.js) stay safe.
+  if (full() || !pool || !LOCKED_PREVIEW_ON) return '';
   const q = pool.find(x => !unlocked(x));
   if (!q) return '';
   const words = q.q.split(/\s+/), stem = words.slice(0, 12).join(' ') + (words.length > 12 ? ' …' : '');
@@ -8193,6 +8199,7 @@ function moreNew() {
     <div class="m-list" data-noi18n>
       ${mRow('#plan', 'plan', 'c4', T('Plan to the exam', 'परीक्षा तक का प्लान'))}
       ${mRow('#progress', 'progress', 'c1', T('Progress by section', 'सेक्शन-वार प्रगति'))}
+      ${mRow('#planner', 'progress', 'c3', T('Marks Planner<small>Your likely score, and where the next hour earns most</small>', 'मार्क्स प्लानर<small>संभावित अंक, और अगला घंटा कहाँ सबसे ज़्यादा देगा</small>'))}
       ${mRow('#syllabus', 'syllabus', 'c2', T('Syllabus and weightage', 'सिलेबस और वेटेज'))}
       ${mRow('#notes', 'notes', 'c7', T('My notes', 'मेरे नोट्स'))}
       ${mRow('#myq', 'myq', 'c5', T('My questions', 'मेरे प्रश्न'))}
@@ -8366,7 +8373,7 @@ V.addEventListener('click', e => {
 // The counts are the learner's own: their exam's sections, the number facts open to them, the days to their exam date.
 // v0.64 (26 Nov 2026): Today's session, Listen & test, and the exam check before payment (Read notes were tried and dropped). The v0.62 sheet
 // (sections, number memory, plan) was shown to everyone who updated to 0.62; 0.63 had no sheet.
-WHATS_NEW.v = '0.66';
+WHATS_NEW.v = '0.67';
 WHATS_NEW.build = () => {   // built when the sheet opens, so the language and the counts are always current
   const S = typeof snSteps === 'function' ? snSteps() : null;
   const d = typeof daysToExam === 'function' ? daysToExam() : null;
@@ -8499,9 +8506,7 @@ async function library() {
       card('capsule', 'tools', T('Daily Capsule', 'डेली कैप्सूल'), T('10 questions for today: old mistakes, a memory check and new facts', 'आज के 10 प्रश्न: पुरानी गलतियाँ, याद की जाँच और नए तथ्य')),
       card('blitz', 'tools', T('Figure Blitz', 'फिगर ब्लिट्ज़'), T('60 seconds of rapid fire on amounts, days, ages and %', '60 सेकंड में राशि, दिन, आयु और % पर तेज़ सवाल')),
       card('branch', 'tools', T('A Day at the Branch', 'ब्रांच में एक दिन'), T('Eight situations through one working day', 'एक कामकाजी दिन की आठ स्थितियाँ'))])}
-    ${group(T('Check and plan', 'जाँचें और योजना बनाएँ'), [
-      card('map', 'tools', T('Syllabus map', 'सिलेबस मैप'), T('Every section by level: what you have covered and where your next marks are', 'हर सेक्शन स्तर के अनुसार: क्या हुआ और अगले अंक कहाँ हैं')),
-      card('planner', 'tools', T('Marks Planner', 'मार्क्स प्लानर'), T('Your likely score by section, and where the next hour earns most', 'सेक्शन-वार संभावित अंक, और अगला घंटा कहाँ सबसे ज़्यादा देगा')),
+    ${group(T('Tools', 'टूल'), [   // v0.67: Marks Planner moved to More → My study with the other progress screens
       card('calc', 'tools', T('Calculators', 'कैलकुलेटर'), T('EMI, drawing power, MPBF, DSCR, NPA provision', 'EMI, ड्रॉइंग पावर, MPBF, DSCR, NPA प्रावधान')),
       card('interview', 'tools', T('Interview Prep', 'इंटरव्यू तैयारी'), T('Panel questions, model points and a timed mock interview', 'पैनल प्रश्न, मॉडल बिंदु और समयबद्ध मॉक इंटरव्यू'))])}
     <div class="card lib-go"><b>${T('Now test what you learnt', 'अब जो सीखा उसे परखें')}</b>
@@ -8968,6 +8973,8 @@ function askWhy() {
 
 // ---------------------------------------------------------------- 2 after a practice session
 function moreInSection(answered) {
+  // v0.67: no unlock box after a practice session (the publisher: "we do enough for unlock advertisement")
+  if (!LOCKED_PREVIEW_ON) return '';
   if (full() || !answered || !answered.length) return '';
   const cnt = {};
   answered.forEach(a => { if (a.q.sec && SEC[a.q.sec]) cnt[a.q.sec] = (cnt[a.q.sec] || 0) + 1; });
@@ -11474,8 +11481,8 @@ const NV_GROUPS = () => [
   [T('Practice', 'अभ्यास'), ['practice', 'session', 'sections', 'mistakes', 'revise', 'recall', 'di', 'search']],
   [T('Mock tests', 'मॉक टेस्ट'), ['mock', 'sectional', 'exam', 'duel', 'plan', 'final']],
   [T('Descriptive', 'वर्णनात्मक'), ['paper', 'write', 'cases', 'frames', 'toolkit']],
-  [T('Learn', 'सीखें'), ['library', 'topics', 'legal', 'confuse', 'changes', 'numbers', 'facts', 'swipe', 'listenq', 'listen', 'capsule', 'blitz', 'branch', 'map', 'planner', 'calc', 'interview', 'numrule', 'danger']],
-  [T('My study', 'मेरी पढ़ाई'), ['journey', 'progress', 'syllabus', 'notes', 'myq']],
+  [T('Learn', 'सीखें'), ['library', 'topics', 'legal', 'confuse', 'changes', 'numbers', 'facts', 'swipe', 'listenq', 'listen', 'capsule', 'blitz', 'branch', 'calc', 'interview', 'numrule', 'danger']],
+  [T('My study', 'मेरी पढ़ाई'), ['journey', 'progress', 'planner', 'map', 'syllabus', 'notes', 'myq']],
   [T('Help and settings', 'मदद और सेटिंग'), ['__wn', 'guide', 'settings', 'feedback', 'about', 'unlock']],
 ];
 const nvName = r => (r === '__wn' ? T("What's new", 'नया क्या है') : r === 'paper' ? T('Descriptive paper', 'वर्णनात्मक पेपर') : r === 'write' ? T('Write an answer', 'उत्तर लिखें') : TITLES[r] || r);
@@ -11643,7 +11650,7 @@ ROUTES.home = function () {
   // the plan card's "Start today's session" replaces "Today's practice" and the old "Today's plan" card; Learn, Learning
   // tools and Search have their own tab or the search icon, so their Home cards go; "Continue" repeated the tab bar.
   if (st.querySelector(':scope > .xp-home')) st.querySelectorAll(':scope > .start-card, :scope > .plan').forEach(e => e.remove());
-  st.querySelectorAll(':scope > .lib-home, :scope > .tools-home, :scope > .sr-home, :scope > .cont-card, :scope > a.chg-home[href="#facts"], :scope > a.chg-home[href="#legal"]').forEach(e => e.remove());
+  st.querySelectorAll(':scope > .lib-home, :scope > .tools-home, :scope > .sr-home, :scope > .cont-card, :scope > a.chg-home[href="#facts"], :scope > a.chg-home[href="#legal"], :scope > .sx-home').forEach(e => e.remove());   // v0.67: Exam sections leads the Practice tab
   st.querySelector('.hero') && st.querySelector('.hero').insertAdjacentHTML('afterend', resumeCard());
   // v0.61: in the final week the day's plan is the first card under the countdown (it used to fold away under "More for you")
   const fw = st.querySelector(':scope > .fw-card'), hero = st.querySelector(':scope > .hero'); if (fw && hero) hero.after(fw);
